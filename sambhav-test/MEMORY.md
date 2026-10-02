@@ -1,6 +1,6 @@
 # SAMBHAV simulation: project memory (read this first in every new session)
 
-Made by SSK · last updated 02-Oct-2026 11:30 UTC
+Made by SSK · last updated 02-Oct-2026 11:37 UTC
 
 ## What this is
 A test of Claude acting as the project manager of **Sambhav** (Walkeshwar, Mumbai) using the AiAi PM Master App.
@@ -41,6 +41,20 @@ progress, delays and decisions are recorded as a simulation, to see how Claude p
   - Registers: project details, people (consultants only, since no contractor is appointed on Day 0), compliance (5 approvals in hand before Day 0 + 17 planned), 6 drawing packages awaited, 11 risks, 7 decisions (D01-D07), 11 cost-of-delay rate heads with no figures (PENDING).
 - **Baseline NOT locked.** Waiting for the user to approve D01 (schedule), D02 (budget), D03 (RERA and possession dates), D05 (calendar) and D06 (rates).
 - The simulation clock: the app runs on the real date. To view as on a simulated day, use Guide and settings > "Look at an earlier date". Daily reports are dated on the simulated day.
+
+
+## Update 02-Oct-2026 11:37 UTC: plan completed from ALL the data (user: "figure out everything from the data that I have")
+Rule applied to every file: a fact that was knowable on Day 0 (a company plan, a budget, a tender quantity, a wage rate, a payment plan, approvals already received) is USED. Actual history after Day 0 is NOT used. It is sealed as an answer key (scratchpad `answer_key/`, not in this public repo) for scoring the simulation later.
+What was added to the app (18 documents; change log version 7, 176 field-level entries as Claude):
+- **The budget figures are reconciled.** Whole project = construction + land + approvals and consultants + admin + finance + marketing + DM fee. The quarterly-plan total = the whole project minus the DM fee (a small unexplained difference). Spend before Day 0 was mostly land and approvals. Construction package total = the company construction head (exact match).
+- **Planned cash flow:** 45 months, Jan-2019 to Sep-2022, plus 29 collections linked to construction stages. It comes from the company sales plan (38,813 sq ft of sale area; payment plan: booking at piling 10%, plinth 10%, parking levels 2/9/15, then 2.5% per habitable slab, terrace, plaster, plumbing/electrical, possession). The funding need is in decision D08. Opening funds are NOT in the data.
+- **Proposed rates (PENDING):** R01 idle labour (wage rates from the Labour Coefficient sheet, gang size estimated by Claude); R05 site overheads and R06 finance cost per day (budget heads / planned days). The company COD uses 18% per year for delayed collections; this is put to the user in D06 and NOT entered.
+- **RERA and possession date PROPOSED as 30-Jun-2023** (the planned completion in the company COD summary); D03 asks the user to confirm.
+- **Planned concrete quantity** for each slab activity, from the earliest civil tender (RA-6), so that progress can be measured.
+- **Calendar:** the 2025 daily labour reports show the site worked about 78% of Sundays. The plan keeps Sunday off and treats Sundays as a recovery reserve.
+- New risk RK12: sales slower than the company plan.
+- Gaps still open, and legitimately so on Day 0: approval of the budget, baseline and rates (human); budget figures for mechanised parking, internal painting and club house fit-out (none in the data); funding plan (D08); contracts, quality and safety (nothing exists before work starts).
+- The daily labour report format (staff, trades, subcontractor gangs) will be used as the template when daily reports are taken in.
 
 ## Inputs used for the Day-0 plan (from Sambhav_Data_Just_for_information.zip)
 - MSP answer key: summary row only (planned start 07-Jan-2019).

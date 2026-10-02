@@ -1,6 +1,6 @@
 # Sambhav: Day-0 master schedule (MSP) - DRAFT for approval
 
-**Made by SSK · 02-Oct-2026 11:26 UTC · prepared by Claude acting as project manager**
+**Made by SSK · first issue 02-Oct-2026 11:26 UTC · updated 02-Oct-2026 11:37 UTC · prepared by Claude acting as project manager**
 Simulation date (Day 0): **Monday 07-Jan-2019**. Status: **DRAFT, NOT LOCKED.** Saved in the app (collection `t`, 13 documents) and checked by the app engine: 0 errors.
 
 ## Key planned dates
@@ -27,6 +27,13 @@ Critical path: approvals (CRZ is the longest) → CC → site set-up → piling 
 
 ## Budget
 The package budgets are in the app (cost register). They are **not** in this public repo because they come from the client's confidential Excel files. The total matches the company's construction cost head. Three packages have no figure: mechanised parking, internal painting and club house fit-out.
+
+## Added from the full data review (02-Oct-2026 11:37 UTC)
+- The budget figures are reconciled (see MEMORY.md). The construction package total equals the company construction head exactly.
+- Planned cash flow (45 months) and 29 stage-linked collections from the company payment plan are in the app. The funding need before sales money comes in is in decision D08. Amounts are kept in the app only.
+- RERA and possession date proposed as 30-Jun-2023, about 10 months after the planned OC.
+- Cost-of-delay rates R01, R05 and R06 proposed with their working shown. Status PENDING.
+- Each slab activity carries a planned concrete quantity from the civil tender.
 
 ## Full activity list (120 rows)
 | ID | Activity | WD | Start | Finish | Predecessors | Monsoon |
@@ -152,4 +159,4 @@ The package budgets are in the app (cost register). They are **not** in this pub
 | OC04 | MCGM OC scrutiny and site inspection | 30 | 27-Jul-2022 | 01-Sep-2022 | M060 FS | N |
 | M070 | Final Occupancy Certificate (OC) | 0 | 01-Sep-2022 | 01-Sep-2022 | OC04 FS | N |
 
-_Made by SSK · 02-Oct-2026 11:26 UTC_
+_Made by SSK · updated 02-Oct-2026 11:37 UTC_
