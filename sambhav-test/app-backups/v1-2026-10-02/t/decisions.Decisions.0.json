@@ -1,0 +1,16 @@
+{
+  "k": "decisions.Decisions",
+  "n": 0,
+  "rows": {
+    "c01u": {
+      "_del": false,
+      "_o": 1,
+      "date": "2026-10-02",
+      "decision": "Confirm the stage of the project today: is the OC applied for or received, and what work is still open on site?",
+      "forChairman": "N",
+      "id": "D01",
+      "options": "Needed before the master schedule can be built. Near OC: a short schedule of remaining work and clearances. Still building: a full floor-by-floor schedule.",
+      "status": "OPEN"
+    }
+  }
+}

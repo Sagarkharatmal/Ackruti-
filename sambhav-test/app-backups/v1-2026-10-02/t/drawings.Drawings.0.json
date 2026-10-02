@@ -1,0 +1,467 @@
+{
+  "k": "drawings.Drawings",
+  "n": 0,
+  "rows": {
+    "c00e": {
+      "_del": false,
+      "_o": 1,
+      "discipline": "architecture",
+      "issuedOn": "2024-07-29",
+      "number": "WL/FP/101",
+      "remarks": "File 20251110 All level Parking plans",
+      "revision": "R55",
+      "status": "GFC",
+      "title": "Fire tank level plan"
+    },
+    "c00f": {
+      "_del": false,
+      "_o": 2,
+      "discipline": "architecture",
+      "issuedOn": "2024-07-29",
+      "number": "WL/FP/102",
+      "remarks": "File 20251110 All level Parking plans",
+      "revision": "R55",
+      "status": "GFC",
+      "title": "Car pit level plan"
+    },
+    "c00g": {
+      "_del": false,
+      "_o": 3,
+      "discipline": "architecture",
+      "issuedOn": "2024-07-29",
+      "number": "WL/FP/103",
+      "remarks": "Also re-issued in file 20260528 Ground floor plan: refer it only for fire meter room",
+      "revision": "R55",
+      "status": "GFC",
+      "title": "Entrance lobby plan (ground)"
+    },
+    "c00h": {
+      "_del": false,
+      "_o": 4,
+      "discipline": "architecture",
+      "issuedOn": "2024-07-29",
+      "number": "WL/FP/104",
+      "remarks": "File 20251110",
+      "revision": "R55",
+      "status": "GFC",
+      "title": "DG set & double height entrance lobby plan"
+    },
+    "c00i": {
+      "_del": false,
+      "_o": 5,
+      "discipline": "architecture",
+      "issuedOn": "2024-07-29",
+      "number": "WL/FP/105",
+      "remarks": "File 20251110 All level Parking plans",
+      "revision": "R55",
+      "status": "GFC",
+      "title": "Parking 1st level plan"
+    },
+    "c00j": {
+      "_del": false,
+      "_o": 6,
+      "discipline": "architecture",
+      "issuedOn": "2024-07-29",
+      "number": "WL/FP/106",
+      "remarks": "File 20251110 All level Parking plans",
+      "revision": "R55",
+      "status": "GFC",
+      "title": "Parking 2nd level plan"
+    },
+    "c00k": {
+      "_del": false,
+      "_o": 7,
+      "discipline": "architecture",
+      "issuedOn": "2024-07-29",
+      "number": "WL/FP/107",
+      "remarks": "File 20251110 All level Parking plans",
+      "revision": "R55",
+      "status": "GFC",
+      "title": "Parking 3rd level plan"
+    },
+    "c00l": {
+      "_del": false,
+      "_o": 8,
+      "discipline": "architecture",
+      "issuedOn": "2024-07-29",
+      "number": "WL/FP/108",
+      "remarks": "File 20251110 All level Parking plans",
+      "revision": "R55",
+      "status": "GFC",
+      "title": "Parking 4th level plan"
+    },
+    "c00m": {
+      "_del": false,
+      "_o": 9,
+      "discipline": "architecture",
+      "issuedOn": "2024-07-29",
+      "number": "WL/FP/109",
+      "remarks": "File 20251110 All level Parking plans",
+      "revision": "R55",
+      "status": "GFC",
+      "title": "Parking 5th level plan"
+    },
+    "c00n": {
+      "_del": false,
+      "_o": 10,
+      "discipline": "architecture",
+      "issuedOn": "2024-07-29",
+      "number": "WL/FP/110",
+      "remarks": "File 20251110 All level Parking plans",
+      "revision": "R55",
+      "status": "GFC",
+      "title": "Parking 6th level plan"
+    },
+    "c00o": {
+      "_del": false,
+      "_o": 11,
+      "discipline": "architecture",
+      "issuedOn": "2024-07-29",
+      "number": "WL/FP/111",
+      "remarks": "File 20251110 All level Parking plans",
+      "revision": "R55",
+      "status": "GFC",
+      "title": "Parking 7th to 9th level plan"
+    },
+    "c00p": {
+      "_del": false,
+      "_o": 12,
+      "discipline": "architecture",
+      "issuedOn": "2024-07-29",
+      "number": "WL/FP/112",
+      "remarks": "File 20251110 All level Parking plans",
+      "revision": "R55",
+      "status": "GFC",
+      "title": "Parking 10th level plan"
+    },
+    "c00q": {
+      "_del": false,
+      "_o": 13,
+      "discipline": "architecture",
+      "issuedOn": "2024-07-29",
+      "number": "WL/FP/113",
+      "remarks": "File 20251110 All level Parking plans",
+      "revision": "R55",
+      "status": "GFC",
+      "title": "Parking 11th to 13th level plan"
+    },
+    "c00r": {
+      "_del": false,
+      "_o": 14,
+      "discipline": "architecture",
+      "issuedOn": "2024-07-29",
+      "number": "WL/FP/114",
+      "remarks": "File 20251110 All level Parking plans",
+      "revision": "R55",
+      "status": "GFC",
+      "title": "Parking 14th level plan"
+    },
+    "c00s": {
+      "_del": false,
+      "_o": 15,
+      "discipline": "architecture",
+      "issuedOn": "2024-07-29",
+      "number": "WL/FP/115",
+      "remarks": "File 20251110 All level Parking plans",
+      "revision": "R55",
+      "status": "GFC",
+      "title": "Parking 15th level plan"
+    },
+    "c00t": {
+      "_del": false,
+      "_o": 16,
+      "discipline": "architecture",
+      "issuedOn": "2026-09-03",
+      "number": "WL/FP/116",
+      "remarks": "File 20260902 1st to 18th Floor Plans. R68: revised as per society office",
+      "revision": "R68",
+      "status": "GFC",
+      "title": "1st level floor plan (club house, refuge, society office)"
+    },
+    "c00u": {
+      "_del": false,
+      "_o": 17,
+      "discipline": "architecture",
+      "issuedOn": "2026-09-03",
+      "number": "WL/FP/117",
+      "remarks": "File 20260902 1st to 18th Floor Plans. R68: revised as per society office",
+      "revision": "R68",
+      "status": "GFC",
+      "title": "2nd level floor plan"
+    },
+    "c00v": {
+      "_del": false,
+      "_o": 18,
+      "discipline": "architecture",
+      "issuedOn": "2026-09-03",
+      "number": "WL/FP/118",
+      "remarks": "File 20260902 1st to 18th Floor Plans. R68: revised as per society office",
+      "revision": "R68",
+      "status": "GFC",
+      "title": "3rd level floor plan"
+    },
+    "c00w": {
+      "_del": false,
+      "_o": 19,
+      "discipline": "architecture",
+      "issuedOn": "2026-09-03",
+      "number": "WL/FP/119",
+      "remarks": "File 20260902 1st to 18th Floor Plans. R68: revised as per society office",
+      "revision": "R68",
+      "status": "GFC",
+      "title": "4th & 6th level floor plan"
+    },
+    "c00x": {
+      "_del": false,
+      "_o": 20,
+      "discipline": "architecture",
+      "issuedOn": "2026-09-03",
+      "number": "WL/FP/120",
+      "remarks": "File 20260902 1st to 18th Floor Plans. R68: revised as per society office",
+      "revision": "R68",
+      "status": "GFC",
+      "title": "5th level floor plan"
+    },
+    "c00y": {
+      "_del": false,
+      "_o": 21,
+      "discipline": "architecture",
+      "issuedOn": "2026-09-03",
+      "number": "WL/FP/121",
+      "remarks": "File 20260902 1st to 18th Floor Plans. R68: revised as per society office",
+      "revision": "R68",
+      "status": "GFC",
+      "title": "7th level floor plan"
+    },
+    "c00z": {
+      "_del": false,
+      "_o": 22,
+      "discipline": "architecture",
+      "issuedOn": "2026-09-03",
+      "number": "WL/FP/122",
+      "remarks": "File 20260902 1st to 18th Floor Plans. R68: revised as per society office",
+      "revision": "R68",
+      "status": "GFC",
+      "title": "8th level floor plan (refuge)"
+    },
+    "c010": {
+      "_del": false,
+      "_o": 23,
+      "discipline": "architecture",
+      "issuedOn": "2026-09-03",
+      "number": "WL/FP/123",
+      "remarks": "File 20260902 1st to 18th Floor Plans. R68: revised as per society office",
+      "revision": "R68",
+      "status": "GFC",
+      "title": "9th, 11th, 13th & 17th level floor plan"
+    },
+    "c011": {
+      "_del": false,
+      "_o": 24,
+      "discipline": "architecture",
+      "issuedOn": "2026-09-03",
+      "number": "WL/FP/124",
+      "remarks": "File 20260902 1st to 18th Floor Plans. R68: revised as per society office. DRAWING NUMBER CLASH: same number used on a sheet in the 19th-LMR file",
+      "revision": "R68",
+      "status": "GFC",
+      "title": "10th, 12th, 16th & 18th level floor plan"
+    },
+    "c012": {
+      "_del": false,
+      "_o": 25,
+      "discipline": "architecture",
+      "issuedOn": "2026-09-03",
+      "number": "WL/FP/125",
+      "remarks": "File 20260902 1st to 18th Floor Plans. R68: revised as per society office. DRAWING NUMBER CLASH: same number used on a sheet in the 19th-LMR file",
+      "revision": "R68",
+      "status": "GFC",
+      "title": "14th level floor plan"
+    },
+    "c013": {
+      "_del": false,
+      "_o": 26,
+      "discipline": "architecture",
+      "issuedOn": "2026-09-03",
+      "number": "WL/FP/126",
+      "remarks": "File 20260902 1st to 18th Floor Plans. R68: revised as per society office. DRAWING NUMBER CLASH: same number used on a sheet in the 19th-LMR file",
+      "revision": "R68",
+      "status": "GFC",
+      "title": "15th level floor plan (refuge)"
+    },
+    "c014": {
+      "_del": false,
+      "_o": 27,
+      "discipline": "architecture",
+      "issuedOn": "2026-02-10",
+      "number": "WL/FP/124",
+      "remarks": "File 20260210. DRAWING NUMBER CLASH with 10th/12th/16th/18th plan",
+      "revision": "R65",
+      "status": "GFC",
+      "title": "19th & 20th level (duplex) floor plans"
+    },
+    "c015": {
+      "_del": false,
+      "_o": 28,
+      "discipline": "architecture",
+      "issuedOn": "2025-10-06",
+      "number": "WL/FP/125",
+      "remarks": "File 20260210. DRAWING NUMBER CLASH with 14th level plan",
+      "revision": "R64",
+      "status": "GFC",
+      "title": "Terrace & upper terrace level floor plans"
+    },
+    "c016": {
+      "_del": false,
+      "_o": 29,
+      "discipline": "architecture",
+      "issuedOn": "2025-10-06",
+      "number": "WL/FP/126",
+      "remarks": "File 20260210. DRAWING NUMBER CLASH with 15th level plan",
+      "revision": "R64",
+      "status": "GFC",
+      "title": "LMR bottom & top level floor plans"
+    },
+    "c017": {
+      "_del": false,
+      "_o": 30,
+      "discipline": "architecture",
+      "issuedOn": "2026-08-20",
+      "number": "WL/D/GI/922",
+      "remarks": "File 20260608 Ground Floor Infrastructure Detail",
+      "revision": "R05",
+      "status": "GFC",
+      "title": "Ground infrastructure"
+    },
+    "c018": {
+      "_del": false,
+      "_o": 31,
+      "discipline": "architecture",
+      "issuedOn": "2026-08-20",
+      "number": "WL/D/GI/923",
+      "remarks": "File 20260608",
+      "revision": "R05",
+      "status": "GFC",
+      "title": "Ground infrastructure"
+    },
+    "c019": {
+      "_del": false,
+      "_o": 32,
+      "discipline": "architecture",
+      "issuedOn": "2026-08-20",
+      "number": "WL/D/GI/925",
+      "remarks": "File 20260608",
+      "revision": "R05",
+      "status": "GFC",
+      "title": "Ground infrastructure - reference levels"
+    },
+    "c01a": {
+      "_del": false,
+      "_o": 33,
+      "discipline": "architecture",
+      "issuedOn": "2026-06-08",
+      "number": "WL/D/GI/926",
+      "remarks": "File 20260608. No revision shown",
+      "status": "GFC",
+      "title": "Ground infrastructure - gate details"
+    },
+    "c01b": {
+      "_del": false,
+      "_o": 34,
+      "discipline": "architecture",
+      "number": "WL/SD/501",
+      "remarks": "Referred to on the plans but not in the set received. NW- prefix on the kitchen detail differs from WL-: check it is the right project",
+      "status": "awaited",
+      "title": "Staircase ST-01 detail"
+    },
+    "c01c": {
+      "_del": false,
+      "_o": 35,
+      "discipline": "architecture",
+      "number": "WL/SD/502",
+      "remarks": "Referred to on the plans but not in the set received. NW- prefix on the kitchen detail differs from WL-: check it is the right project",
+      "status": "awaited",
+      "title": "Staircase ST-02 detail"
+    },
+    "c01d": {
+      "_del": false,
+      "_o": 36,
+      "discipline": "architecture",
+      "number": "WL-D-TD-501",
+      "remarks": "Referred to on the plans but not in the set received. NW- prefix on the kitchen detail differs from WL-: check it is the right project",
+      "status": "awaited",
+      "title": "Toilet 01 detail"
+    },
+    "c01e": {
+      "_del": false,
+      "_o": 37,
+      "discipline": "architecture",
+      "number": "WL-D-TD-502",
+      "remarks": "Referred to on the plans but not in the set received. NW- prefix on the kitchen detail differs from WL-: check it is the right project",
+      "status": "awaited",
+      "title": "Toilet 02 detail"
+    },
+    "c01f": {
+      "_del": false,
+      "_o": 38,
+      "discipline": "architecture",
+      "number": "WL-D-TD-503",
+      "remarks": "Referred to on the plans but not in the set received. NW- prefix on the kitchen detail differs from WL-: check it is the right project",
+      "status": "awaited",
+      "title": "Toilet 03 detail"
+    },
+    "c01g": {
+      "_del": false,
+      "_o": 39,
+      "discipline": "architecture",
+      "number": "WL-D-TD-504",
+      "remarks": "Referred to on the plans but not in the set received. NW- prefix on the kitchen detail differs from WL-: check it is the right project",
+      "status": "awaited",
+      "title": "Toilet 04 detail"
+    },
+    "c01h": {
+      "_del": false,
+      "_o": 40,
+      "discipline": "architecture",
+      "number": "WL-D-TD-505",
+      "remarks": "Referred to on the plans but not in the set received. NW- prefix on the kitchen detail differs from WL-: check it is the right project",
+      "status": "awaited",
+      "title": "Toilet 05 detail"
+    },
+    "c01i": {
+      "_del": false,
+      "_o": 41,
+      "discipline": "architecture",
+      "number": "WL-D-TD-506",
+      "remarks": "Referred to on the plans but not in the set received. NW- prefix on the kitchen detail differs from WL-: check it is the right project",
+      "status": "awaited",
+      "title": "Toilet 06 detail"
+    },
+    "c01j": {
+      "_del": false,
+      "_o": 42,
+      "discipline": "architecture",
+      "number": "WL-D-TD-507",
+      "remarks": "Referred to on the plans but not in the set received. NW- prefix on the kitchen detail differs from WL-: check it is the right project",
+      "status": "awaited",
+      "title": "Toilet 07 detail"
+    },
+    "c01k": {
+      "_del": false,
+      "_o": 43,
+      "discipline": "architecture",
+      "number": "WL-D-TD-508",
+      "remarks": "Referred to on the plans but not in the set received. NW- prefix on the kitchen detail differs from WL-: check it is the right project",
+      "status": "awaited",
+      "title": "Toilet 08 detail"
+    },
+    "c01l": {
+      "_del": false,
+      "_o": 44,
+      "discipline": "architecture",
+      "number": "NW-D-KD-510",
+      "remarks": "Referred to on the plans but not in the set received. NW- prefix on the kitchen detail differs from WL-: check it is the right project",
+      "status": "awaited",
+      "title": "Kitchen 01 detail"
+    }
+  }
+}

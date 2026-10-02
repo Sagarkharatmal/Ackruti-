@@ -1,0 +1,107 @@
+{
+  "k": "people.People",
+  "n": 0,
+  "rows": {
+    "c001": {
+      "_del": false,
+      "_o": 1,
+      "email": null,
+      "name": null,
+      "organisation": "M/s Helictite Residency Pvt. Ltd.",
+      "phone": null,
+      "remarks": null,
+      "role": "Client / promoter",
+      "supplies": null
+    },
+    "c002": {
+      "_del": false,
+      "_o": 2,
+      "email": null,
+      "name": "Team on title block: S. Babu, Vikrant, Abhijit, Sanika (roles not stated)",
+      "organisation": "Suresh Babu & Partners (SBP)",
+      "phone": "022-22666010",
+      "remarks": null,
+      "role": "Architect",
+      "supplies": "Architectural drawings, revisions"
+    },
+    "c003": {
+      "_del": false,
+      "_o": 3,
+      "email": "designs@gescpl.com",
+      "name": null,
+      "organisation": "Global Engineering Services (GES)",
+      "phone": "022-67940050",
+      "remarks": null,
+      "role": "Structural consultant",
+      "supplies": "Structural drawings and comments"
+    },
+    "c004": {
+      "_del": false,
+      "_o": 4,
+      "email": "mumbaipda@gmail.com",
+      "name": null,
+      "organisation": "Pankaj Dharkar & Associates",
+      "phone": "022-26837283",
+      "remarks": "Mumbai office: 302 Trade Avenue, 260 Suren Road, off Gurunanak Petrol Pump, Andheri (E), Mumbai 400093",
+      "role": "MEP consultant",
+      "supplies": "MEP drawings, cut-outs"
+    },
+    "c005": {
+      "_del": false,
+      "_o": 5,
+      "email": null,
+      "name": null,
+      "organisation": "Aakar Architect",
+      "phone": "022-26129933",
+      "remarks": "GR. FLR, Satyanarayan Prasad Commercial Centre, Dayaldas Rd., Vile Parle (E), Mumbai 400057. www.aakararchitect.org",
+      "role": "Landscape consultant",
+      "supplies": "Landscape design"
+    },
+    "c006": {
+      "_del": false,
+      "_o": 6,
+      "email": null,
+      "name": null,
+      "organisation": "Name not shown on the drawings",
+      "phone": null,
+      "remarks": null,
+      "role": "Liaison consultant",
+      "supplies": "Approvals with BMC, CFO and other authorities"
+    },
+    "c007": {
+      "_del": false,
+      "_o": 7,
+      "role": "Main user (approves each Chairman's Dashboard release)"
+    },
+    "c008": {
+      "_del": false,
+      "_o": 8,
+      "role": "Site in-charge"
+    },
+    "c009": {
+      "_del": false,
+      "_o": 9,
+      "role": "Planning"
+    },
+    "c00a": {
+      "_del": false,
+      "_o": 10,
+      "role": "Billing and accounts"
+    },
+    "c00b": {
+      "_del": false,
+      "_o": 11,
+      "role": "Quality"
+    },
+    "c00c": {
+      "_del": false,
+      "_o": 12,
+      "role": "Safety"
+    },
+    "c00d": {
+      "_del": false,
+      "_o": 13,
+      "role": "Contracts or legal contact"
+    }
+  }
+}
