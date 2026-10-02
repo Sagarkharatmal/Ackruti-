@@ -1,0 +1,17 @@
+{
+  "k": "project_details.Details",
+  "kv": {
+    "architect": "Suresh Babu & Partners (SBP), 11 S.A. Brelvi Road, Fort, Mumbai 400001. Tel 022-22666010",
+    "authority": "Brihanmumbai Municipal Corporation (BMC / MCGM), D Ward - to confirm",
+    "buildingType": "Residential high-rise tower with mechanised parking podium",
+    "builtUpArea": "12,008.75 sq m construction BUA (built-up area summary on drawings)",
+    "currentStage": "Reported on property sites (UNVERIFIED, date of report unknown) as the latest MahaRERA progress: foundation 100%, structure 100%, finishing 23%, services 45%. Drawing note on WL/FP/116 (26-Jun-2026): Apply for OC 23/06/2026. Site stage to be confirmed by the main user.",
+    "floors": "Basement/car pit + lower ground + ground + intermediate + 15 mechanised parking levels + 1st (amenity & refuge) + 2nd-18th residential (8th & 15th refuge) + 19th-20th duplex + terrace + OHT/LMR",
+    "location": "Dongarsi Road, Walkeshwar (Malabar Hill), Mumbai, Maharashtra",
+    "name": "Sambhav",
+    "projectCode": "SAMBHAV",
+    "reraDate": "2028-12-30",
+    "reraNumber": "P51900025024 (from public listings - verify on MahaRERA)",
+    "structuralConsultant": "Global Engineering Services (GES), 607 Mayuresh Cosmos, Sector 11, CBD Belapur, Navi Mumbai 400614. Tel 022-67940050, designs@gescpl.com"
+  }
+}

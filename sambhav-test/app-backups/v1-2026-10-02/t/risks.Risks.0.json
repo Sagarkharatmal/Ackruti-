@@ -1,0 +1,61 @@
+{
+  "k": "risks.Risks",
+  "n": 0,
+  "rows": {
+    "c01q": {
+      "_del": false,
+      "_o": 1,
+      "actionNow": "Get written confirmation that the as-built height matches the approved plans before the OC inspection",
+      "category": "approvals",
+      "date": "2026-10-02",
+      "id": "RK01",
+      "risk": "Building height only assumed acceptable to the client and BMC (architect note 1 on every plan: \"We are assuming building height is okay for client & municipal authority\")",
+      "status": "OPEN",
+      "warningSign": "Any query on height during OC scrutiny"
+    },
+    "c01r": {
+      "_del": false,
+      "_o": 2,
+      "actionNow": "Confirm the extension is covered by the approved plans before the OC inspection",
+      "category": "approvals",
+      "date": "2026-10-02",
+      "id": "RK02",
+      "risk": "Amenity area raised from 2% to 4% and slabs extended; the architect asked for comments (1st floor plan)",
+      "status": "OPEN",
+      "warningSign": "Extended slabs not shown in the latest approved (amended) plans"
+    },
+    "c01s": {
+      "_del": false,
+      "_o": 3,
+      "actionNow": "Confirm passage A is approved or regularised; keep the approval letter ready",
+      "category": "approvals",
+      "date": "2026-10-02",
+      "id": "RK03",
+      "risk": "OC note: the building matches the approved drawing except the additional passage marked A on the 1st floor",
+      "status": "OPEN",
+      "warningSign": "BMC objects to passage A at OC scrutiny"
+    },
+    "c01t": {
+      "_del": false,
+      "_o": 4,
+      "actionNow": "Ask SBP to renumber; until then quote number AND title",
+      "category": "design",
+      "date": "2026-10-02",
+      "id": "RK04",
+      "risk": "Same drawing numbers used for different sheets (WL/FP/124, 125, 126): the wrong sheet can be used on site",
+      "status": "OPEN",
+      "warningSign": "Site refers to a drawing by number only"
+    },
+    "c900": {
+      "_del": false,
+      "_o": 5,
+      "actionNow": "Obtain the MahaRERA certificate and the latest quarterly progress report, and enter the verified dates",
+      "category": "approvals",
+      "date": "2026-10-02",
+      "id": "RK05",
+      "risk": "Public sources disagree on key project facts: completion 30-Dec-2028 vs possession Dec-2027, Jun-2028, Dec-2028 or Apr-2029; 10, 11, 13 or 36 units; 20 floors vs 43 sanctioned floors; RERA registration 8-Sep-2021 vs 18-Mar-2020",
+      "status": "OPEN",
+      "warningSign": "Any date or unit count used in the app that is not from the MahaRERA certificate"
+    }
+  }
+}

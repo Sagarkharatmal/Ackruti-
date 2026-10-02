@@ -1,0 +1,116 @@
+{
+  "k": "rates.Rates",
+  "n": 0,
+  "rows": {
+    "c01v": {
+      "_del": false,
+      "_o": 1,
+      "appliesTo": "ALL",
+      "head": "Idle labour",
+      "id": "R01",
+      "layer": "ACTIVITY",
+      "status": "PENDING",
+      "trigger": "ACTIVITY_LATE"
+    },
+    "c01w": {
+      "_del": false,
+      "_o": 2,
+      "appliesTo": "ALL",
+      "head": "Equipment and scaffolding hire",
+      "id": "R02",
+      "layer": "ACTIVITY",
+      "status": "PENDING",
+      "trigger": "ACTIVITY_LATE"
+    },
+    "c01x": {
+      "_del": false,
+      "_o": 3,
+      "appliesTo": "ALL",
+      "head": "Contractor standby claims",
+      "id": "R03",
+      "layer": "ACTIVITY",
+      "status": "PENDING",
+      "trigger": "ACTIVITY_LATE"
+    },
+    "c01y": {
+      "_del": false,
+      "_o": 4,
+      "appliesTo": "ALL",
+      "head": "Extended supervision",
+      "id": "R04",
+      "layer": "ACTIVITY",
+      "status": "PENDING",
+      "trigger": "ACTIVITY_LATE"
+    },
+    "c01z": {
+      "_del": false,
+      "_o": 5,
+      "appliesTo": "PROJECT",
+      "head": "Site overheads",
+      "id": "R05",
+      "layer": "PROJECT",
+      "status": "PENDING",
+      "trigger": "OC_MOVES"
+    },
+    "c020": {
+      "_del": false,
+      "_o": 6,
+      "appliesTo": "PROJECT",
+      "head": "Interest on project funding",
+      "id": "R06",
+      "layer": "PROJECT",
+      "status": "PENDING",
+      "trigger": "OC_MOVES"
+    },
+    "c021": {
+      "_del": false,
+      "_o": 7,
+      "appliesTo": "PROJECT",
+      "head": "Price escalation on remaining work",
+      "id": "R07",
+      "layer": "PROJECT",
+      "status": "PENDING",
+      "trigger": "OC_MOVES"
+    },
+    "c022": {
+      "_del": false,
+      "_o": 8,
+      "appliesTo": "PROJECT",
+      "head": "Compensation or interest payable to buyers",
+      "id": "R08",
+      "layer": "PROJECT",
+      "status": "PENDING",
+      "trigger": "POSSESSION_DATE"
+    },
+    "c023": {
+      "_del": false,
+      "_o": 9,
+      "appliesTo": "PROJECT",
+      "head": "Penalties under contracts",
+      "id": "R09",
+      "layer": "PROJECT",
+      "status": "PENDING",
+      "trigger": "FIXED_DATE"
+    },
+    "c024": {
+      "_del": false,
+      "_o": 10,
+      "appliesTo": "PROJECT",
+      "head": "Cost of extending approvals and RERA registration",
+      "id": "R10",
+      "layer": "PROJECT",
+      "status": "PENDING",
+      "trigger": "RERA_DATE"
+    },
+    "c025": {
+      "_del": false,
+      "_o": 11,
+      "appliesTo": "PROJECT",
+      "head": "Interest cost of delayed collections (if a per-day figure is preferred to the percent in Settings)",
+      "id": "R11",
+      "layer": "PROJECT",
+      "status": "PENDING",
+      "trigger": "OC_MOVES"
+    }
+  }
+}

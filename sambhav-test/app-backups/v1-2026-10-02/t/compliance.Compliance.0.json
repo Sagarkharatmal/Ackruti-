@@ -1,0 +1,56 @@
+{
+  "k": "compliance.Compliance",
+  "n": 0,
+  "rows": {
+    "c01m": {
+      "_del": false,
+      "_o": 1,
+      "breach": "N",
+      "dueDate": "2028-12-30",
+      "id": "AP01",
+      "item": "MahaRERA registration of Sambhav - project completion date",
+      "notes": "Unverified, from property-site summaries on 02-Oct-2026. Registered with MahaRERA 8-Sep-2021 per most sources (one says 18-Mar-2020). Completion 30-Dec-2028; one source gives proposed possession Apr-2029. Survey nos 186 and 187 (CTS 186/187, Malabar Hill). Boundaries: E CTS 188 Aastha Building, W Dongarsi Road School, S CTS 185 Dongarsi Road. Verify all on the MahaRERA certificate.",
+      "party": "MahaRERA",
+      "reference": "P51900025024",
+      "source": "Public property listings - NOT verified on MahaRERA",
+      "status": "OPEN",
+      "type": "RERA registration"
+    },
+    "c01n": {
+      "_del": false,
+      "_o": 2,
+      "breach": "N",
+      "id": "AP02",
+      "item": "Occupancy Certificate (OC) for the building",
+      "notes": "Drawing note: As per approved dwg only except additional passage A; Apply for OC 23/06/2026. Confirm whether applied, the file number and the date",
+      "party": "BMC (MCGM) - building proposal department",
+      "source": "Note on drawing WL/FP/116 dated 26-Jun-2026",
+      "status": "OPEN",
+      "type": "OC clearance"
+    },
+    "c01o": {
+      "_del": false,
+      "_o": 3,
+      "breach": "N",
+      "id": "AP03",
+      "item": "Final fire NOC from Chief Fire Officer (needed for OC)",
+      "notes": "Status, file number and date to be confirmed",
+      "party": "Mumbai Fire Brigade (CFO)",
+      "source": "CFO requirements are referred to in revision R51 of the drawings",
+      "status": "OPEN",
+      "type": "OC clearance"
+    },
+    "c01p": {
+      "_del": false,
+      "_o": 4,
+      "breach": "N",
+      "id": "AP04",
+      "item": "Lift and mechanised car parking inspection / licence (needed before occupation)",
+      "notes": "Confirm the authority, status and dates",
+      "party": "Lift inspection authority, Govt. of Maharashtra - to confirm",
+      "source": "2 passenger lifts, fire lift and mechanised parking shown on the drawings",
+      "status": "OPEN",
+      "type": "OC clearance"
+    }
+  }
+}
