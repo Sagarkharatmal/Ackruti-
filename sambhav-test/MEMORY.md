@@ -1,6 +1,6 @@
 # SAMBHAV simulation: project memory (read this first in every new session)
 
-Made by SSK · last updated 02-Oct-2026
+Made by SSK · last updated 02-Oct-2026 11:30 UTC
 
 ## What this is
 A test of Claude acting as the project manager of **Sambhav** (Walkeshwar, Mumbai) using the AiAi PM Master App.
@@ -32,7 +32,23 @@ progress, delays and decisions are recorded as a simulation, to see how Claude p
   | Sambhav.OCT.2025 Baseline (...).xlsx | the real company schedule (Oct 2025 baseline) | The answer key. NOT read, so that Claude's plan is independent |
 - Contractor named in the data: Mehta Jaising Builders LLP (RCC/civil, "Civil core and shell work (1B+G...)"). Confirm with the user before using.
 
-## Status
-- Day 0 date: **NOT YET GIVEN** (user will give it).
-- App contents: empty (cleared). Admin state: phase 3.
-- Next: user to give day 0 and the answers listed in NEXT_STEPS.md; then Claude builds calendar, project details, packages, master schedule (draft for approval), budget (pending approval), rates (pending approval).
+## Status (02-Oct-2026 11:30 UTC)
+- **Day 0 = Monday 07-Jan-2019**, the planned start in the summary row of the company MSP. That row is the only part of the answer-key MSP that was read.
+- **The Day-0 plan is built and saved in the app** (13 documents in `t`, 305 change-log entries as Claude in `log/2026-10-02`, version 6). Read back: identical. Engine: 0 errors; 5 warnings (budgets missing on MP01, MP02, BA6, BB6, CH01).
+  - Master schedule: 120 activities. Final OC planned **01-Sep-2022**. Structure complete 12-Jan-2022. CC 05-Oct-2019. See DAY0_PLAN.md.
+  - Calendar: Sunday off; 2019-2026 holidays (web-checked); monsoon stoppage 10-Jun to 30-Sep for works marked Y.
+  - Budget: 19 packages proposed (NOT approved); the total equals the company construction cost head. Figures are in the app only, because this repo is PUBLIC.
+  - Registers: project details, people (consultants only, since no contractor is appointed on Day 0), compliance (5 approvals in hand before Day 0 + 17 planned), 6 drawing packages awaited, 11 risks, 7 decisions (D01-D07), 11 cost-of-delay rate heads with no figures (PENDING).
+- **Baseline NOT locked.** Waiting for the user to approve D01 (schedule), D02 (budget), D03 (RERA and possession dates), D05 (calendar) and D06 (rates).
+- The simulation clock: the app runs on the real date. To view as on a simulated day, use Guide and settings > "Look at an earlier date". Daily reports are dated on the simulated day.
+
+## Inputs used for the Day-0 plan (from Sambhav_Data_Just_for_information.zip)
+- MSP answer key: summary row only (planned start 07-Jan-2019).
+- R1 Approval Detail.xlsx: only approvals dated BEFORE Day 0 (demarcation 2014 and 2017, CFO NOC 2014, IOD 26-Dec-2018, layout amalgamation 26-Dec-2018) and the names of approvals needed.
+- Sambhav_COD Analysis (3).xlsx: Planned Budget Quarterly sheet (package budgets) and the planned budget total.
+- RA Bill file: tender quantities and rates of the civil BOQ only (no executed quantities).
+- **Disclosure (honest record):** to find the budget figures and the approval list, Claude's screen also showed (a) the actual approval dates and actual slab dates in R1, (b) the actual delay reasons and the actual completion date in the COD summary, and (c) the company's original planned completion, 30-Jun-2023. These were NOT used to set durations or logic. The risk register uses only location- and type-based foresight. RK09 (Banganga heritage area) overlaps with a real delay reason, so it is marked here as possibly influenced.
+
+## Files kept outside the repo (confidential, in the session scratchpad only)
+- The Day-0 builder script with budget figures, the full app backup v2 and the engine summary. Ask the user before pushing them, or make the repo private.
+
