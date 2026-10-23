@@ -9,3 +9,8 @@ services:
     buildCommand: npm ci --omit=dev
     startCommand: node src/server.js
     healthCheckPath: /health
+    envVars:
+      # Paste a PostgreSQL connection string (e.g. a free Neon database) so
+      # events, chat and leaderboards survive restarts. Leave empty to test.
+      - key: DATABASE_URL
+        sync: false

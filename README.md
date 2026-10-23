@@ -6,13 +6,21 @@
 
 **Chhupan Chhupai** is real-life hide-and-seek for the whole mohalla. **Hiders hide. Seekers hunt. The phone is the referee.**
 
-It is an Android app plus a small game server. Friends join a game with a 6-character code. Then:
+It is an Android app plus a small game server. There are two ways to play:
+
+1. **Quick game:** friends join with a 6-character code.
+2. **Chhupan Chhupai Nights (events):** a host publishes an event at a meeting point. People nearby find it, RSVP, chat and get a reminder. They check in when they arrive, and the host runs several rounds that feed one **leaderboard** for the night.
+
+In every round:
 
 - **Head start.** Hiders get a head start to hide inside a play zone on the map.
 - **Pings.** Every few minutes, seekers see where each hider *was* (a "ping").
 - **Zone rule.** Hiders who leave the zone become visible live.
 - **Tagging.** A tag only counts when the hider confirms it on their phone.
 - **Winning.** Survivors win when the clock runs out.
+- **Dhappa! (optional).** Caught hiders wait at the base, and a free hider who reaches it frees them all.
+- **Role reveal.** All phones show "?" and then flip to SEEKER or HIDER together when a round starts.
+- **Share card.** After each round you can share a story card with your route and stats.
 
 It is inspired by the SCRAM: Hide and Seek app. It was rebuilt from scratch with its own code, name and artwork, using only public information about how that game plays. Nothing was copied or decompiled. [docs/ANALYSIS.md](docs/ANALYSIS.md) has the full feature analysis, the design choices and the risks.
 
@@ -47,6 +55,15 @@ All players in a game must connect to the **same** server. The simplest free opt
 
 About the free plan: the server **sleeps after 15 minutes with no players** and takes about **1 minute to wake up** for the first game after that. While a game is running, the phones keep it awake. Render's free-plan limits change from time to time, so check their pricing page.
 
+**Make events permanent (strongly recommended, free, about 5 minutes).** Render's free disk is wiped whenever the server restarts or sleeps. That's fine for quick games, but events, chat and leaderboards would be lost. Use a free PostgreSQL database instead:
+
+1. Sign up at <https://neon.com> (free plan) and create a project.
+2. Copy its **connection string**. It looks like `postgresql://user:password@ep-xxx.neon.tech/neondb?sslmode=require`.
+3. In Render, open your service → **Environment** → set `DATABASE_URL` to that string → **Save** (Render redeploys).
+4. The server creates its table automatically. Its log shows `loaded N documents from PostgreSQL`.
+
+Free plans and limits change; check Neon's pricing page. Render's own free Postgres is deleted after 30 days, so it's not a good fit here.
+
 **Alternative: test at home without the internet**
 
 - Install Node.js 20 or newer from <https://nodejs.org> on a laptop.
@@ -74,7 +91,7 @@ The app is built automatically by GitHub every time code is pushed.
 
 Optional: to skip step 5 for everyone, go to GitHub → **Settings → Secrets and variables → Actions → Variables** and add a variable `CHHUPAN_SERVER_URL` with your server address. Future builds will have it built in.
 
-### C. Play
+### C. Play a quick game
 
 1. **Host:** tap **Create a game**. Drag the map so the circle covers your play area, set the round length, head start and ping timer, then tap **Create game**.
 2. **Everyone else:** tap **Join with a code** and enter the code shown in the host's lobby (use the share button).
@@ -86,6 +103,23 @@ Optional: to skip step 5 for everyone, go to GitHub → **Settings → Secrets a
    - The hider confirms.
    - Hiders can also tap **I've been caught**.
 7. At the end, everyone sees the **results map** with each player's route, time survived and distance. The host can tap **Play again**.
+
+### D. Host a Chhupan Chhupai Night (event)
+
+1. **Home → Events near you → Host an event.**
+2. **Step 1: drag the map** so the crosshair is on the meeting point, give it a name (e.g. "Shivaji Park, Gate 5") and pick the zone size.
+3. **Step 2: fill in the details.**
+   - name, club or college, description
+   - sponsor (optional)
+   - date and time, length
+   - max people
+   - public (anyone nearby can find it) or private (code only)
+   - the round rules
+4. Tap **Publish**, then use the **share** icon to invite people on WhatsApp or Instagram.
+5. Players: **Events near you** → open it → **I'm in!** They join the chat and get a reminder.
+6. On the day, players tap **I'm here — check in** within 300 m of the meeting point. You can also check people in from the **People** tab.
+7. Tap **Start round 1**. Everyone who RSVPed sees **Join round 1 now**. Huddle up, hold the phones together, and start the round in the lobby.
+8. After each round the results go on the **Ranking** tab. Start the next round when everyone's back.
 
 Tips:
 
@@ -102,7 +136,8 @@ Tips:
 ```bash
 cd server
 npm install
-npm test                 # 22 tests: rules, visibility filtering, full WebSocket flow
+npm test                 # 34 tests: rules, Dhappa, visibility filtering, events, storage, full WebSocket + HTTP flows
+TEST_DATABASE_URL=postgres://user:pass@localhost/db npm test   # also tests the PostgreSQL store
 npm start                # PORT env var, default 8080
 npm run simulate         # bots play a ~1 minute round against ws://localhost:8080/ws
 node scripts/simulate.js wss://your-server.onrender.com/ws   # check a deployment
@@ -148,11 +183,21 @@ Without signing secrets, the "release" APK is signed with a throw-away debug key
    - `CHHUPAN_KEY_PASSWORD`
 3. **Never commit the keystore**: this repository is public.
 
+### Server settings (environment variables)
+
+| Variable | Meaning |
+|---|---|
+| `PORT` | Port to listen on (Render sets this). Default 8080. |
+| `DATABASE_URL` | PostgreSQL connection string. When set, users, events, chat and leaderboards are stored there. |
+| `DATA_FILE` | Without `DATABASE_URL`, the JSON file used for storage (default `data/chhupan.json`). |
+
 ### Privacy
 
 - The app sends your location to the game server **only while you are in a game**.
 - The server shows it to other players **only as the rules allow**: hiders are never shown live unless they leave the zone or the round is over.
-- Games live only in the server's memory and are deleted after the game ends (or after 8 hours at most). There are no accounts, no ads and no analytics.
+- Games live only in the server's memory and are deleted after the game ends (or after 8 hours at most).
+- **Events** store your chosen display name, RSVPs, check-in times, chat messages and round results. They do **not** store your location trail. The only location used is the one-off check-in position, which is compared with the meeting point and not saved.
+- There are no email or phone accounts: the app gets a random ID and secret from the server. No ads, no analytics.
 
 ---
 

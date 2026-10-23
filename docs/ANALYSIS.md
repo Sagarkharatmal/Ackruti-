@@ -1,6 +1,6 @@
 # How SCRAM works, and how Chhupan Chhupai rebuilds it
 
-> **Made by SSK** · Written 23 Oct 2026, 20:30 UTC
+> **Made by SSK** · Written 23 Oct 2026, 20:30 UTC · Events & marketing section added 23 Oct 2026, 21:10 UTC
 
 This document has three parts. First, what SCRAM: Hide and Seek does, based only on public information. Second, how its features map to Chhupan Chhupai. Third, what is still unknown, plus the legal and safety points to keep in mind.
 
@@ -132,6 +132,7 @@ These cannot be known without SCRAM's private data or code:
                                              └──────────────────────────┘
 ```
 
+- **What is stored where?** Live games are kept in memory only. Users, events, chat and leaderboards go in a durable store: a JSON file by default, or **PostgreSQL** when `DATABASE_URL` is set. The free hosting disk is wiped on restart, so a free Neon Postgres database is recommended (README → Events storage).
 - **Why WebSocket and Node instead of Firebase?** A server you can run yourself:
   - is fully testable here: 22 automated tests plus a bot simulation;
   - keeps all secret game state on the server, so a hacked app cannot see seekers;
@@ -161,16 +162,86 @@ These cannot be known without SCRAM's private data or code:
 
 ---
 
-## 6. Ideas for later versions
+## 6. Marketing and events: what SCRAM promotes, and what we built from it
+
+### 6.1 Who is behind SCRAM
+
+| Finding | Type |
+|---|---|
+| SCRAM: Hide and Seek is published by **Moveera Pty Ltd**, with a contact address in Mount Coolum, Queensland, Australia. The app is free with in-app purchases. AppBrain reports 10,000+ downloads. | Fact (Play listing, as summarised by search) |
+| Moveera also publishes **"Moveera: Fitness Events"**, a local-events app for run clubs, yoga and pickleball in South East Queensland. Its features:<br>• discover and book events<br>• save events to your week<br>• reminders<br>• see who is attending<br>• follow communities and hosts<br>• chat before the day<br>• tap-to-check-in on the morning<br>• an automatic group chat for everyone who registers<br>• free listing for hosts<br>• sponsor showcasing<br>Its site claims 1,226 "movers", 43 communities and 434 events hosted; these figures may be outdated. | Fact (moveera.com.au, Play listing) |
+| SCRAM grew out of an **events-and-community company**, not a games studio. The "everyone comes to one place" feel of the reels comes from that background: run-club style meet-ups where a crowd plays together. | Inferred |
+| The Play listing says games are **private, joined by code, and deleted after seven days**. | Fact |
+| The site says the play area can be a **street, park, campus or campsite**. | Fact |
+| The site now lists **iPhone and Android** (the earlier Instagram bio said "waitlist for iPhone"). | Fact (wording changed over time) |
+
+### 6.2 What their marketing shows
+
+These are taken from your Instagram screenshot and the SCRAM TikTok account as summarised by search.
+
+| What the content shows | What it tells us | Type |
+|---|---|---|
+| A ring of 15–20 phones, all glowing red, held together in the dark (≈1M views) | **Big-group, in-person events** are the hero moment. The phones-together shot is the signature visual. | Fact (visual) / Inferred (meaning) |
+| Phones held together showing orange **"?"** marks, captioned **"this is manhunt."** | A **role-reveal ritual** before the round starts: everyone finds out together who hunts. | Fact (visual) / Inferred |
+| A reel with two phone screens showing **route maps** and **"Caught after 35:26 · 1.6 km"** | **Shareable post-game stats** turn every game into content. | Fact (low-confidence on exact numbers) |
+| A collab with `@bucketlistbrandd` | **Brand / creator partnerships** around events. I found no public details about this partner. | Fact (handle) / Unknown (what it is) |
+| TikTok captions such as "ready for manhunt?", #manhunt #scram | They position the game as **"manhunt"**, an established real-life game, to ride existing search interest. | Fact |
+
+### 6.3 Competitor landscape (late 2026)
+
+According to a comparison page at manhuntgame.com (provisional ratings; the author says they haven't played every app):
+
+- **HideZone:** 2–100+ players, ads, Pro tier.
+- **Hunting Game:** free up to 4 players, Pro up to 20, power-ups.
+- **On The Run:** city-wide games, leaving the area pings your position.
+- **Manhunt: Hide & Seek:** Pro adds zone alerts and location history.
+- **SLAP:** sign-up required, paid power-ups.
+- **Hide Game:** up to 10 players free, 50 with Pro, replays.
+- **None of the apps it checked listed the "jail & jailbreak" mechanic.**
+
+### 6.4 What Chhupan Chhupai now has because of this
+
+| Inspiration | Chhupan Chhupai feature |
+|---|---|
+| Moveera's event discovery and booking | **Chhupan Chhupai Nights**: hosts publish an event (name, club or college, meeting point on a map, date and time, length, capacity, sponsor, public or private). Players see **events near them** (within 50 km, soonest first) or open a private one by code. |
+| "See who's attending", follow communities | Event page shows the host, community, going/capacity, the **attendee list** and who has arrived. "My events" lists what you host and attend. |
+| "Chat before the day" / automatic group chat | **Group chat** for everyone who RSVPs, plus **pinned host announcements** ("Meet at gate 5"). |
+| Reminders | **Reminder notification** 1 hour before (10 minutes if booked late). It is re-armed after the phone restarts. |
+| "Check in with a tap" | **GPS-verified check-in** within 300 m of the meeting point, from 2 hours before the start. The host can also check people in by hand. |
+| Crowd events in the reels | The host starts **rounds from the event** and players join with one tap. Rounds hold **up to 100 players**, and the server sends updates every 2 s in big games to keep data use reasonable. |
+| Results that become content | Each round's points go on the **event leaderboard** (🥇🥈🥉). **Share my round card** makes a 1080×1920 story image with your route, headline stat ("SURVIVED 24:10" or "3 CATCHES"), event name and "Presented by" sponsor. |
+| The "?" phones-together ritual | **Synchronised role reveal**: when a round starts, every phone pulses a big "?" for 2.5 s, then all flip at the same moment (server clock) to a full-screen SEEKER (red) or HIDER (teal). |
+| Sponsor showcasing | **Sponsor** shown on event cards, the event page, the invite text and every share card. |
+| The gap: nobody lists jail/jailbreak | **"Dhappa!"**, the classic Indian Chhupan Chhupai rescue, as an optional rule:<br>• caught hiders wait at the **base** in the zone's centre;<br>• a free hider who reaches it frees everyone;<br>• there is a 2-minute cooldown, and jailed hiders can't spectate, so they can't spy on seekers. |
+
+**Points rules** (shown in the app):
+
+- **Hiders:** 1 point per full minute survived after the head start, and +10 if never found.
+- **Seekers:** 5 points per catch, and +5 if the seekers win.
+- **Dhappa rescues:** +2 per team-mate freed.
+
+### 6.5 Still not built (honest gaps)
+
+- Following hosts or communities.
+- Push notifications from the server, e.g. "a new event near you". That needs Firebase Cloud Messaging and therefore a Google project; the app currently polls while it is open.
+- Payments or ticketing.
+- Photo uploads.
+- An organiser web dashboard.
+- Moderation and reporting tools for public chat. **Needed before a public launch.**
+
+---
+
+## 7. Ideas for later versions
 
 - Hindi / Marathi / Gujarati UI translations
 - Chor-Police theme pack
 - Sounds for pings
-- Deep link `chhupan://join/CODE` and QR code in the lobby
-- "Radar" power-ups
-- Persistent leaderboards (needs a database)
+- Deep link `chhupan://event/CODE` and a QR code at the meeting point for one-scan check-in
+- Follow communities
+- Push notifications (needs Firebase Cloud Messaging)
+- Season leaderboards across events
 - Mock-location detection
-- iOS app (the server already works for any client)
+- iOS app: the server and protocol already work for any client
 
 ---
 
