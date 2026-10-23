@@ -1,0 +1,11 @@
+# One-click deploy of the Chhupan Chhupai game server on Render
+# (Render dashboard → New → Blueprint → pick this repository).
+services:
+  - type: web
+    name: chhupan-chhupai-server
+    runtime: node
+    rootDir: server
+    plan: free
+    buildCommand: npm ci --omit=dev
+    startCommand: node src/server.js
+    healthCheckPath: /health
