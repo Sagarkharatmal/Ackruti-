@@ -19,7 +19,7 @@ export const ROLE = Object.freeze({ SEEKER: 'seeker', HIDER: 'hider' });
 export const PREF = Object.freeze({ SEEKER: 'seeker', HIDER: 'hider', RANDOM: 'random' });
 export const STATUS = Object.freeze({ ACTIVE: 'active', CAUGHT: 'caught', LEFT: 'left' });
 
-export const MAX_PLAYERS = 30;
+export const MAX_PLAYERS = 100;
 export const MIN_PLAYERS = 2;
 const TAG_REQUEST_TTL_MS = 60_000;
 const STALE_LOCATION_MS = 90_000;
@@ -29,6 +29,8 @@ const MIN_TRAIL_STEP_M = 8;
 const ZONE_ACCURACY_ALLOWANCE_M = 30;
 const MAX_EVENTS = 40;
 const PINGS_SHOWN = 5;
+export const DHAPPA_RADIUS_M = 25;
+const DHAPPA_COOLDOWN_MS = 120_000;
 
 export class GameError extends Error {}
 
@@ -48,6 +50,9 @@ export const DEFAULT_SETTINGS = Object.freeze({
   shrinkEnabled: false,
   shrinkToPct: 40,
   outOfZoneGraceSec: 30,
+  // "Dhappa!": caught hiders wait at the base (zone centre); a free hider who
+  // reaches the base frees them all.
+  dhappaEnabled: false,
 });
 
 /** Returns a complete, clamped settings object built from `base` + `patch`. */
@@ -63,6 +68,7 @@ export function sanitiseSettings(patch = {}, base = DEFAULT_SETTINGS) {
     shrinkEnabled: Boolean(merged.shrinkEnabled),
     shrinkToPct: Math.round(clamp(merged.shrinkToPct, 10, 90, base.shrinkToPct)),
     outOfZoneGraceSec: Math.round(clamp(merged.outOfZoneGraceSec, 10, 120, base.outOfZoneGraceSec)),
+    dhappaEnabled: Boolean(merged.dhappaEnabled),
   };
   const z = merged.zone;
   if (z && isValidLatLng(Number(z.lat), Number(z.lng))) {
@@ -123,8 +129,20 @@ export class Game {
    * @param {(playerId: string, message: object) => void} [opts.send] direct messages
    * @param {() => number} [opts.random]
    */
-  constructor({ code, now = Date.now, send = () => {}, random = Math.random, settings = {} }) {
+  constructor({
+    code,
+    now = Date.now,
+    send = () => {},
+    random = Math.random,
+    settings = {},
+    eventId = null,
+    hostUserId = null,
+    onFinish = () => {},
+  }) {
     this.code = code;
+    this.eventId = eventId;
+    this.hostUserId = hostUserId;
+    this.onFinish = onFinish;
     this.now = now;
     this.send = send;
     this.random = random;
@@ -150,6 +168,7 @@ export class Game {
     this.tagRequests.clear();
     this.results = null;
     this.endedAt = null;
+    this.lastDhappaAt = null;
     for (const p of [...this.players.values()]) {
       if (p.status === STATUS.LEFT) {
         this.players.delete(p.id);
@@ -234,8 +253,12 @@ export class Game {
 
   // ---------------------------------------------------------------- lobby
 
-  addPlayer(rawName) {
+  addPlayer(rawName, userId = null) {
     if (this.phase !== PHASE.LOBBY) throw new GameError('This game has already started.');
+    if (userId) {
+      const existing = this.presentPlayers().find((p) => p.userId === userId);
+      if (existing) return existing;
+    }
     if (this.presentPlayers().length >= MAX_PLAYERS) throw new GameError('This game is full.');
     const name = cleanName(rawName);
     if (this.presentPlayers().some((p) => p.name.toLowerCase() === name.toLowerCase())) {
@@ -245,6 +268,7 @@ export class Game {
       id: makeId(),
       token: makeToken(),
       name,
+      userId,
       rolePref: PREF.RANDOM,
       role: null,
       status: STATUS.ACTIVE,
@@ -253,7 +277,12 @@ export class Game {
       ...freshRoundStats(),
     };
     this.players.set(player.id, player);
-    if (!this.hostId) this.hostId = player.id;
+    // An event round belongs to the event host; otherwise the first player hosts.
+    if (this.hostUserId) {
+      if (userId === this.hostUserId) this.hostId = player.id;
+    } else if (!this.hostId) {
+      this.hostId = player.id;
+    }
     this.log('join', `${name} joined`);
     return player;
   }
@@ -364,8 +393,37 @@ export class Game {
     if (this.inRound()) {
       this.recordTrail(p, p.loc);
       this.updateZoneStatus(p, at);
+      this.checkDhappa(p, at);
     }
     this.touch();
+  }
+
+  /** Where caught hiders wait when "Dhappa!" is on (the zone centre). */
+  dhappaBase() {
+    if (!this.settings.dhappaEnabled || !this.settings.zone) return null;
+    return { lat: this.settings.zone.lat, lng: this.settings.zone.lng, radiusM: DHAPPA_RADIUS_M };
+  }
+
+  checkDhappa(p, at) {
+    const base = this.dhappaBase();
+    if (!base || this.phase !== PHASE.HUNT) return;
+    if (p.role !== ROLE.HIDER || p.status !== STATUS.ACTIVE || !p.loc) return;
+    const jailed = this.presentPlayers().filter((h) => h.role === ROLE.HIDER && h.status === STATUS.CAUGHT);
+    if (jailed.length === 0) return;
+    if (this.lastDhappaAt && at - this.lastDhappaAt < DHAPPA_COOLDOWN_MS) return;
+    const d = distanceM(base.lat, base.lng, p.loc.lat, p.loc.lng) - Math.min(p.loc.acc ?? 0, 15);
+    if (d > base.radiusM) return;
+    this.lastDhappaAt = at;
+    p.rescues += jailed.length;
+    for (const h of jailed) {
+      h.status = STATUS.ACTIVE;
+      h.caughtAt = null;
+      h.caughtBy = null;
+      h.endedAt = null;
+    }
+    const text = `DHAPPA! ${p.name} reached the base and freed ${jailed.map((h) => h.name).join(', ')}!`;
+    this.log('dhappa', text, { playerId: p.id });
+    this.notify(this.allIds(), 'dhappa', text);
   }
 
   recordTrail(p, loc) {
@@ -484,6 +542,7 @@ export class Game {
   markCaught(hider, seeker) {
     if (hider.status !== STATUS.ACTIVE) return;
     hider.status = STATUS.CAUGHT;
+    hider.timesCaught += 1;
     hider.caughtAt = this.now();
     hider.caughtBy = seeker?.id ?? null;
     hider.endedAt = hider.caughtAt;
@@ -491,7 +550,8 @@ export class Game {
     hider.revealed = false;
     if (seeker) seeker.catches += 1;
     for (const [id, req] of this.tagRequests) if (req.toId === hider.id) this.tagRequests.delete(id);
-    const text = seeker ? `${hider.name} was caught by ${seeker.name}!` : `${hider.name} was caught!`;
+    const caughtText = seeker ? `${hider.name} was caught by ${seeker.name}!` : `${hider.name} was caught!`;
+    const text = this.settings.dhappaEnabled ? `${caughtText} To the base!` : caughtText;
     this.log('caught', text, { playerId: hider.id });
     this.notify(this.allIds(), 'caught', text, { playerId: hider.id });
     this.checkForWinner();
@@ -519,8 +579,8 @@ export class Game {
     this.log('lobby', 'Back in the lobby for another round!');
   }
 
-  finish(winner, reason) {
-    const at = this.now();
+  /** `at` defaults to now; time-up passes the scheduled end so a late tick doesn't add time. */
+  finish(winner, reason, at = this.now()) {
     this.phase = PHASE.ENDED;
     this.endedAt = at;
     this.tagRequests.clear();
@@ -541,9 +601,12 @@ export class Game {
         .filter((p) => p.role)
         .map((p) => ({
           id: p.id,
+          userId: p.userId ?? null,
           name: p.name,
           role: p.role,
           status: p.status,
+          timesCaught: p.timesCaught,
+          rescues: p.rescues,
           caughtAt: p.caughtAt,
           caughtBy: p.caughtBy,
           survivedMs: p.role === ROLE.HIDER ? (p.endedAt ?? at) - this.startedAt : null,
@@ -558,6 +621,11 @@ export class Game {
     else text = `Round over. ${reason}`;
     this.log('end', text);
     this.notify(this.allIds(), 'game_over', text);
+    try {
+      this.onFinish(this);
+    } catch {
+      // A failing listener must never break the game itself.
+    }
   }
 
   /** Advances clocks. Call roughly once a second. */
@@ -584,7 +652,7 @@ export class Game {
       for (const h of this.activeHiders()) if (h.loc) this.updateZoneStatus(h, at);
       if (at >= this.endsAt) {
         const left = this.activeHiders().length;
-        this.finish(ROLE.HIDER, `Time is up — ${left} hider(s) were never found.`);
+        this.finish(ROLE.HIDER, `Time is up — ${left} hider(s) were never found.`, this.endsAt);
       }
     }
   }
@@ -597,7 +665,9 @@ export class Game {
     if (!me) return null;
     const at = this.now();
     const ended = this.phase === PHASE.ENDED;
-    const spectator = me.role === ROLE.HIDER && me.status !== STATUS.ACTIVE;
+    // With "Dhappa!" a caught hider can be freed, so they must not see the seekers.
+    const caught = me.role === ROLE.HIDER && me.status !== STATUS.ACTIVE;
+    const spectator = caught && !this.settings.dhappaEnabled;
     const seeker = me.role === ROLE.SEEKER;
     const seesEverything = ended || spectator;
 
@@ -622,6 +692,7 @@ export class Game {
       t: 'state',
       now: at,
       code: this.code,
+      eventId: this.eventId,
       round: this.round,
       phase: this.phase,
       hostId: this.hostId,
@@ -636,6 +707,7 @@ export class Game {
         this.settings.zoneEnabled && this.settings.zone
           ? { ...this.settings.zone, currentRadiusM: this.currentRadiusM(at) }
           : null,
+      dhappaBase: this.dhappaBase(),
       hidersLeft: this.activeHiders().length,
       players: this.presentPlayers()
         .sort((a, b) => a.joinedAt - b.joinedAt)
@@ -657,6 +729,7 @@ export class Game {
         rolePref: me.rolePref,
         isHost: me.id === this.hostId,
         spectator,
+        inJail: caught && this.settings.dhappaEnabled && me.status === STATUS.CAUGHT,
         loc: me.loc ?? null,
         outSince: me.outSince,
         revealed: me.revealed,
@@ -688,6 +761,8 @@ function freshRoundStats() {
     caughtBy: null,
     endedAt: null,
     catches: 0,
+    timesCaught: 0,
+    rescues: 0,
     outSince: null,
     revealed: false,
   };

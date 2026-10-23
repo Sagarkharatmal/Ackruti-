@@ -306,3 +306,42 @@ test('auth tokens are required to resume', () => {
   assert.throws(() => game.authenticate(ps[0].id, 'nope'), GameError);
   assert.equal(game.authenticate(ps[0].id, ps[0].token), ps[0]);
 });
+
+test('Dhappa: a free hider reaching the base frees every caught hider (with cooldown)', () => {
+  const ctx = setup({ settings: { dhappaEnabled: true } });
+  const { game, advance, sent } = ctx;
+  const { seeker, hiders } = startWithSeeker(ctx);
+  advance(61_000);
+  game.reportCaught(hiders[0].id, seeker.id);
+  game.reportCaught(hiders[1].id, seeker.id);
+  const jailedView = game.viewFor(hiders[0].id);
+  assert.equal(jailedView.you.inJail, true);
+  assert.equal(jailedView.you.spectator, false, 'jailed hiders must not spectate (they may be freed)');
+  assert.deepEqual(jailedView.live, []);
+  assert.ok(jailedView.dhappaBase);
+
+  game.updateLocation(hiders[2].id, { ...metresNorth(100), acc: 5 });
+  assert.equal(game.players.get(hiders[0].id).status, STATUS.CAUGHT, 'too far from base');
+  game.updateLocation(hiders[2].id, { ...metresNorth(10), acc: 5 });
+  assert.equal(game.players.get(hiders[0].id).status, STATUS.ACTIVE);
+  assert.equal(game.players.get(hiders[1].id).status, STATUS.ACTIVE);
+  assert.equal(game.players.get(hiders[2].id).rescues, 2);
+  assert.ok(sent.some((s) => s.msg.kind === 'dhappa'));
+
+  game.reportCaught(hiders[0].id, seeker.id);
+  game.updateLocation(hiders[2].id, { ...metresNorth(5), acc: 5 });
+  assert.equal(game.players.get(hiders[0].id).status, STATUS.CAUGHT, 'cooldown blocks an instant second rescue');
+  advance(120_000);
+  game.updateLocation(hiders[2].id, { ...metresNorth(4), acc: 5 });
+  assert.equal(game.players.get(hiders[0].id).status, STATUS.ACTIVE);
+  assert.equal(game.players.get(hiders[0].id).timesCaught, 2);
+});
+
+test('event rounds are hosted by the event host, whoever joins first', () => {
+  const game = new Game({ code: 'EVT123', hostUserId: 'host-user', settings: { zoneEnabled: false } });
+  const early = game.addPlayer('Early', 'u1');
+  assert.equal(game.hostId, null);
+  const host = game.addPlayer('Host', 'host-user');
+  assert.equal(game.hostId, host.id);
+  assert.equal(game.addPlayer('Early again', 'u1'), early, 'same user joining twice gets the same seat');
+});
