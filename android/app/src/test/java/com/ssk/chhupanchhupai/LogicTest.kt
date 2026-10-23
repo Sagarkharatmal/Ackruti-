@@ -21,6 +21,13 @@ class LogicTest {
     }
 
     @Test
+    fun restBaseIsDerivedFromTheGameServerAddress() {
+        assertEquals("https://my-game.onrender.com", Prefs.httpBaseFromWs("my-game.onrender.com"))
+        assertEquals("http://192.168.1.20:8080", Prefs.httpBaseFromWs("ws://192.168.1.20:8080/ws"))
+        assertEquals("", Prefs.httpBaseFromWs(""))
+    }
+
+    @Test
     fun clockAndDistanceFormatting() {
         assertEquals("00:00", formatClock(-5000))
         assertEquals("02:05", formatClock(125_000))

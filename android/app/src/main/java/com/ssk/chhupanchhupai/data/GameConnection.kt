@@ -33,7 +33,12 @@ import kotlin.math.min
  * service). Reconnects automatically while the player is in a game and rejoins
  * with the saved token, so walking through a dead zone doesn't kick you out.
  */
-class GameConnection(private val prefs: SessionStore, private val scope: CoroutineScope) {
+class GameConnection(
+    private val prefs: SessionStore,
+    private val scope: CoroutineScope,
+    /** Optional sign-in sent with create/join so event rounds can credit points. */
+    private val identity: () -> Identity? = { null },
+) {
 
     enum class Link { IDLE, CONNECTING, ONLINE, RECONNECTING }
 
@@ -87,6 +92,10 @@ class GameConnection(private val prefs: SessionStore, private val scope: Corouti
         request(serverUrl, buildJsonObject {
             put("t", "create")
             put("name", name)
+            identity()?.let {
+                put("userId", it.userId)
+                put("userSecret", it.secret)
+            }
             put("settings", GameJson.encodeToJsonElement(GameSettings.serializer(), settings))
         })
     }
@@ -96,6 +105,10 @@ class GameConnection(private val prefs: SessionStore, private val scope: Corouti
             put("t", "join")
             put("code", code)
             put("name", name)
+            identity()?.let {
+                put("userId", it.userId)
+                put("userSecret", it.secret)
+            }
         })
     }
 

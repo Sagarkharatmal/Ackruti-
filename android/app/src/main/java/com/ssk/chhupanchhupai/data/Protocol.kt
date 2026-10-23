@@ -51,7 +51,11 @@ data class GameSettings(
     val shrinkEnabled: Boolean = false,
     val shrinkToPct: Int = 40,
     val outOfZoneGraceSec: Int = 30,
+    val dhappaEnabled: Boolean = false,
 )
+
+@Serializable
+data class DhappaBase(val lat: Double, val lng: Double, val radiusM: Int = 25)
 
 @Serializable
 data class Loc(
@@ -90,6 +94,8 @@ data class You(
     val rolePref: String = Role.RANDOM,
     val isHost: Boolean = false,
     val spectator: Boolean = false,
+    /** Caught with "Dhappa!" on: wait at the base to be freed. */
+    val inJail: Boolean = false,
     val loc: Loc? = null,
     val outSince: Long? = null,
     val revealed: Boolean = false,
@@ -144,6 +150,8 @@ data class ResultPlayer(
     val caughtBy: String? = null,
     val survivedMs: Long? = null,
     val catches: Int = 0,
+    val timesCaught: Int = 0,
+    val rescues: Int = 0,
     val distanceM: Int = 0,
     val trail: List<List<Double>> = emptyList(),
 )
@@ -163,6 +171,7 @@ data class Results(
 data class GameState(
     val now: Long,
     val code: String,
+    val eventId: String? = null,
     val round: Int = 1,
     val phase: String = Phase.LOBBY,
     val hostId: String? = null,
@@ -174,6 +183,7 @@ data class GameState(
     val lastPingAt: Long? = null,
     val pingCount: Int = 0,
     val zone: Zone? = null,
+    val dhappaBase: DhappaBase? = null,
     val hidersLeft: Int = 0,
     val players: List<PlayerInfo> = emptyList(),
     val you: You,

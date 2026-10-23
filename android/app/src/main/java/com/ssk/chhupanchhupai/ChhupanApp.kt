@@ -3,6 +3,8 @@ package com.ssk.chhupanchhupai
 import android.app.Activity
 import android.app.Application
 import android.os.Bundle
+import com.ssk.chhupanchhupai.data.ApiClient
+import com.ssk.chhupanchhupai.data.EventDetail
 import com.ssk.chhupanchhupai.data.GameConnection
 import com.ssk.chhupanchhupai.data.Loc
 import com.ssk.chhupanchhupai.data.Prefs
@@ -23,6 +25,14 @@ class ChhupanApp : Application() {
         private set
     lateinit var alerts: Alerts
         private set
+    lateinit var api: ApiClient
+        private set
+
+    /** The event whose round we're playing (for the share card and "back to event"). */
+    val activeEvent = MutableStateFlow<EventDetail?>(null)
+
+    /** Set by a reminder notification: open this event's page. */
+    val openEventRequest = MutableStateFlow<String?>(null)
 
     /** This phone's latest GPS fix (updated by the location service). */
     val myLocation = MutableStateFlow<Loc?>(null)
@@ -35,7 +45,8 @@ class ChhupanApp : Application() {
     override fun onCreate() {
         super.onCreate()
         prefs = Prefs(this)
-        connection = GameConnection(prefs, appScope)
+        connection = GameConnection(prefs, appScope) { prefs.identity }
+        api = ApiClient(prefs)
         alerts = Alerts(this)
 
         // OpenStreetMap tiles: identify the app and keep the cache in app storage

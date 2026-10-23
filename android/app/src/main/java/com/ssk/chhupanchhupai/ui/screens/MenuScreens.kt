@@ -60,6 +60,7 @@ fun HomeScreen(
     serverMissing: Boolean,
     onCreate: () -> Unit,
     onJoin: () -> Unit,
+    onEvents: () -> Unit,
     onHowTo: () -> Unit,
     onSettings: () -> Unit,
 ) {
@@ -94,9 +95,17 @@ fun HomeScreen(
             }
             Spacer(Modifier.height(16.dp))
         }
-        BigButton("Create a game", onCreate, color = Saffron)
+        BigButton("Events near you", onEvents, color = Marigold)
+        Text(
+            "Chhupan Chhupai Nights: RSVP, meet up, play rounds, top the leaderboard.",
+            style = MaterialTheme.typography.bodySmall,
+            color = MaterialTheme.colorScheme.onSurfaceVariant,
+            textAlign = TextAlign.Center,
+            modifier = Modifier.padding(top = 4.dp, bottom = 16.dp),
+        )
+        BigButton("Quick game: create", onCreate, color = Saffron)
         Spacer(Modifier.height(12.dp))
-        BigButton("Join with a code", onJoin, color = HiderTeal)
+        BigButton("Quick game: join with a code", onJoin, color = HiderTeal)
         Spacer(Modifier.height(20.dp))
         Row(horizontalArrangement = Arrangement.spacedBy(12.dp)) {
             OutlinedButton(onClick = onHowTo) { Text("How to play") }
@@ -300,6 +309,8 @@ fun HowToPlayScreen(onBack: () -> Unit) {
         Rule("3. Pings", "Every few minutes a ping shows seekers where each hider was at that moment. Hiders feel a buzz when they've been pinged — time to move!")
         Rule("4. Stay in the zone", "Step outside the zone and you get a short warning. Stay out past the grace period and seekers see you live until you come back in.")
         Rule("5. Tag!", "Seekers catch hiders by tagging them in person. The seeker taps Tag and the hider confirms on their phone (or a hider taps \"I've been caught\"). Caught hiders become spectators and can watch everyone.")
+        Rule("Dhappa! (optional)", "If the host switches on Dhappa, caught hiders walk to the base at the centre of the zone and wait. If a free hider reaches the base — shout DHAPPA! — everyone in jail is freed. Seekers: guard the base!")
+        Rule("Events", "Hosts can publish a Chhupan Chhupai Night: a meeting point, a time and a capacity. Players RSVP, chat, get a reminder, check in when they arrive and play several rounds. Points from every round go on the night's leaderboard.")
         Rule("6. Winning", "Seekers win if they catch everyone. Hiders who are still free when the clock runs out win the round. Then hit Play again!")
         Rule("Stay safe", "Play in places you know, stay off roads and private property, keep an eye on younger players, and agree on a meeting point for the end of the round.")
     }

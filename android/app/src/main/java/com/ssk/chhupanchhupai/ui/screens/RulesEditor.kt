@@ -2,6 +2,7 @@ package com.ssk.chhupanchhupai.ui.screens
 
 import android.annotation.SuppressLint
 import android.content.Context
+import android.location.Location
 import androidx.compose.foundation.background
 import androidx.compose.foundation.border
 import androidx.compose.foundation.layout.Box
@@ -51,7 +52,10 @@ import org.osmdroid.events.ScrollEvent
 import org.osmdroid.events.ZoomEvent
 import org.osmdroid.util.GeoPoint
 import org.osmdroid.views.MapView
+import kotlin.coroutines.resume
 import kotlin.math.roundToInt
+import kotlinx.coroutines.suspendCancellableCoroutine
+import kotlinx.coroutines.withTimeoutOrNull
 
 /** One-shot GPS fix for centring the zone picker. */
 @SuppressLint("MissingPermission")
@@ -61,6 +65,22 @@ fun fetchCurrentLocation(context: Context, onResult: (GeoPoint) -> Unit) {
         .getCurrentLocation(Priority.PRIORITY_HIGH_ACCURACY, null)
         .addOnSuccessListener { location -> if (location != null) onResult(GeoPoint(location.latitude, location.longitude)) }
 }
+
+/** A fresh GPS fix with accuracy, or null (no permission, no fix within the timeout). */
+@SuppressLint("MissingPermission")
+suspend fun currentLocation(context: Context, timeoutMs: Long = 8000): Location? =
+    withTimeoutOrNull(timeoutMs) {
+        suspendCancellableCoroutine<Location?> { cont ->
+            if (!GameLocationService.hasLocationPermission(context)) {
+                cont.resume(null)
+                return@suspendCancellableCoroutine
+            }
+            LocationServices.getFusedLocationProviderClient(context)
+                .getCurrentLocation(Priority.PRIORITY_HIGH_ACCURACY, null)
+                .addOnSuccessListener { if (cont.isActive) cont.resume(it) }
+                .addOnFailureListener { if (cont.isActive) cont.resume(null) }
+        }
+    }
 
 /**
  * Map where the host drags the play zone into place: the zone is always centred
@@ -200,6 +220,11 @@ fun RulesForm(settings: GameSettings, onChange: (GameSettings) -> Unit) {
                         onChange = { onChange(settings.copy(shrinkToPct = (it / 5f).roundToInt() * 5)) },
                     )
                 }
+                SwitchRow(
+                    "Dhappa! (jailbreak)",
+                    "Caught hiders wait at the base in the zone's centre. A free hider who reaches it frees them all.",
+                    settings.dhappaEnabled,
+                ) { onChange(settings.copy(dhappaEnabled = it)) }
                 LabeledSlider(
                     label = "Out-of-zone grace",
                     valueText = formatSeconds(settings.outOfZoneGraceSec),

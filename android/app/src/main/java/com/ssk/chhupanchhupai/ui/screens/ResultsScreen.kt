@@ -35,6 +35,7 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.ssk.chhupanchhupai.ChhupanApp
+import com.ssk.chhupanchhupai.ShareCard
 import com.ssk.chhupanchhupai.data.GameState
 import com.ssk.chhupanchhupai.data.ResultPlayer
 import com.ssk.chhupanchhupai.data.Role
@@ -64,7 +65,8 @@ private val TrailColors = listOf(
 
 @Composable
 fun ResultsScreen(game: GameState, onLeave: () -> Unit) {
-    val app = LocalContext.current.applicationContext as ChhupanApp
+    val context = LocalContext.current
+    val app = context.applicationContext as ChhupanApp
     val results = game.results
     var map by remember { mutableStateOf<MapView?>(null) }
     var layer by remember { mutableStateOf<MapLayer?>(null) }
@@ -119,8 +121,21 @@ fun ResultsScreen(game: GameState, onLeave: () -> Unit) {
                 .padding(16.dp),
             verticalArrangement = Arrangement.spacedBy(8.dp),
         ) {
-            if (game.you.isHost) {
+            val mine = results?.players?.firstOrNull { it.id == game.you.id }
+            if (mine != null && results != null) {
+                BigButton("Share my round card", color = HiderTeal, onClick = {
+                    val event = app.activeEvent.value?.takeIf { it.id == game.eventId }
+                    ShareCard.share(context, ShareCard.render(context, mine, results, event?.title, event?.sponsor?.name))
+                })
+            }
+            if (game.you.isHost && game.eventId == null) {
                 BigButton("Play again with the same group", onClick = { app.connection.rematch() })
+            } else if (game.eventId != null) {
+                Text(
+                    "Points from this round are on the event leaderboard. The host can start the next round from the event page.",
+                    style = MaterialTheme.typography.bodySmall,
+                    color = MaterialTheme.colorScheme.onSurfaceVariant,
+                )
             } else {
                 Text(
                     "The host can start another round from here.",
@@ -128,7 +143,9 @@ fun ResultsScreen(game: GameState, onLeave: () -> Unit) {
                     color = MaterialTheme.colorScheme.onSurfaceVariant,
                 )
             }
-            OutlinedButton(onClick = onLeave, modifier = Modifier.fillMaxWidth()) { Text("Leave game") }
+            OutlinedButton(onClick = onLeave, modifier = Modifier.fillMaxWidth()) {
+                Text(if (game.eventId != null) "Back to the event" else "Leave game")
+            }
         }
     }
 
@@ -166,6 +183,8 @@ private fun PlayerResult(p: ResultPlayer, color: Color, everyone: List<ResultPla
         }
         val detail = when {
             p.role == Role.SEEKER -> "${p.catches} catch${if (p.catches == 1) "" else "es"}"
+            p.role == Role.HIDER && p.timesCaught >= 1 && p.status == Status.ACTIVE ->
+                "Caught ${p.timesCaught}× but freed by Dhappa — still free at the end (${formatClock(p.survivedMs ?: 0)})"
             p.status == Status.CAUGHT -> {
                 val by = everyone.firstOrNull { it.id == p.caughtBy }?.name
                 "Caught${if (by != null) " by $by" else ""} after ${formatClock(p.survivedMs ?: 0)}"
@@ -174,6 +193,7 @@ private fun PlayerResult(p: ResultPlayer, color: Color, everyone: List<ResultPla
             else -> "Never found! Survived ${formatClock(p.survivedMs ?: 0)}"
         }
         Text(detail, style = MaterialTheme.typography.bodyMedium)
+        if (p.rescues > 0) Text("Freed ${p.rescues} friend(s) with Dhappa!", color = com.ssk.chhupanchhupai.ui.theme.Marigold)
         Text(
             "Moved ${formatDistance(p.distanceM)}",
             style = MaterialTheme.typography.bodySmall,

@@ -74,6 +74,8 @@ import org.osmdroid.views.MapView
 import org.osmdroid.views.overlay.Overlay
 
 private val MeBlue = Color(0xFF4DA3FF)
+private const val ROLE_REVEAL_MS = 6_000L
+private const val ROLE_REVEAL_FLIP_MS = 2_500L
 
 @Composable
 fun GameScreen(game: GameState, permissions: PermissionState, onLeave: () -> Unit) {
@@ -114,6 +116,9 @@ fun GameScreen(game: GameState, permissions: PermissionState, onLeave: () -> Uni
         ) {
             Hud(game, now, onEnd = { confirmEnd = true })
             ZoneBanner(game, now)
+            if (game.isActiveHider && game.dhappaBase != null && game.players.any { it.role == Role.HIDER && it.status == Status.CAUGHT }) {
+                Banner("Friends are in jail! Reach the BASE to shout DHAPPA and free them.", HiderTeal)
+            }
             if (!permissions.granted) {
                 Banner("Location is off — the game can't see you. Tap to allow.", SeekerRed, onClick = permissions.request)
             }
@@ -142,6 +147,11 @@ fun GameScreen(game: GameState, permissions: PermissionState, onLeave: () -> Uni
 
         if (game.isSeeker && game.phase == Phase.HEADSTART) {
             SeekerWaitCover(game, now)
+        }
+        // Everyone's phone flips from "?" to their role at the same moment.
+        val startedAt = game.startedAt
+        if (game.phase == Phase.HEADSTART && startedAt != null && now - startedAt < ROLE_REVEAL_MS) {
+            RoleReveal(game, now - startedAt)
         }
     }
 
@@ -273,6 +283,10 @@ private fun buildOverlays(m: MapView, game: GameState, me: Loc?, now: Long): Lis
         }
         overlays += dotMarker(m, GeoPoint(live.lat, live.lng), color, label)
     }
+    game.dhappaBase?.let { b ->
+        overlays += zoneCircle(m, b.lat, b.lng, b.radiusM.toDouble(), Marigold, fillAlpha = 0.35f)
+        overlays += dotMarker(m, GeoPoint(b.lat, b.lng), Marigold, "BASE · Dhappa!")
+    }
     if (me != null) overlays += dotMarker(m, GeoPoint(me.lat, me.lng), MeBlue, "You")
     return overlays
 }
@@ -390,6 +404,11 @@ private fun ActionPanel(game: GameState, onCaught: () -> Unit, onTag: (PlayerInf
             }
         }
 
+        game.you.inJail -> Banner(
+            "Caught! Walk to the BASE and wait there. If a free hider reaches it — DHAPPA! — you're back in the game.",
+            Marigold,
+        )
+
         game.you.spectator -> Banner("You've been caught. You can now watch everyone live — no telling!", MaterialTheme.colorScheme.onSurfaceVariant)
         else -> Unit
     }
@@ -465,4 +484,39 @@ private fun CaughtDialog(seekers: List<PlayerInfo>, onConfirm: (String?) -> Unit
         },
         dismissButton = { TextButton(onClick = onDismiss) { Text("Cancel") } },
     )
+}
+
+/** "Huddle up" moment: phones held together show "?" then flip to each player's role. */
+@Composable
+private fun RoleReveal(game: GameState, elapsedMs: Long) {
+    val flipped = elapsedMs >= ROLE_REVEAL_FLIP_MS
+    val seeker = game.isSeeker
+    val color = if (!flipped) Saffron else if (seeker) SeekerRed else HiderTeal
+    Column(
+        Modifier
+            .fillMaxSize()
+            .background(if (flipped) color else Night),
+        verticalArrangement = Arrangement.Center,
+        horizontalAlignment = Alignment.CenterHorizontally,
+    ) {
+        if (!flipped) {
+            // A pulsing question mark while everyone holds their phones together.
+            val pulse = 1f + 0.12f * kotlin.math.sin(elapsedMs / 120.0).toFloat()
+            Text("?", fontSize = (220 * pulse).sp, fontWeight = FontWeight.Black, color = Saffron)
+            Text("Huddle up… who's hiding?", style = MaterialTheme.typography.titleLarge, color = MaterialTheme.colorScheme.onBackground)
+        } else {
+            Text("YOU ARE A", style = MaterialTheme.typography.titleLarge, color = Night, fontWeight = FontWeight.Black)
+            Text(
+                if (seeker) "SEEKER" else "HIDER",
+                fontSize = 72.sp,
+                fontWeight = FontWeight.Black,
+                color = Night,
+            )
+            Text(
+                if (seeker) "Close your eyes and count!" else "RUN! Go hide!",
+                style = MaterialTheme.typography.titleLarge,
+                color = Night,
+            )
+        }
+    }
 }

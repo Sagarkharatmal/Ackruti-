@@ -45,6 +45,7 @@ fun OsmMap(
     modifier: Modifier = Modifier,
     center: GeoPoint = FALLBACK_CENTER,
     zoom: Double = 16.0,
+    interactive: Boolean = true,
     onReady: (MapView) -> Unit = {},
 ) {
     val context = LocalContext.current
@@ -60,6 +61,8 @@ fun OsmMap(
             controller.setZoom(zoom)
             controller.setCenter(center)
             overlays.add(CopyrightOverlay(context))
+            // A preview map inside a scrolling page must not steal the scroll gesture.
+            if (!interactive) setOnTouchListener { _, _ -> true }
         }
     }
     val readyCallback by rememberUpdatedState(onReady)

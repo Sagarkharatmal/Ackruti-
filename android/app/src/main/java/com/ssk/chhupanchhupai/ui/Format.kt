@@ -32,3 +32,25 @@ fun formatAgo(ms: Long): String {
         else -> "${sec / 3600}h ago"
     }
 }
+
+private val eventFormatter = java.time.format.DateTimeFormatter.ofPattern("EEE d MMM · h:mm a", Locale.getDefault())
+private val dayFormatter = java.time.format.DateTimeFormatter.ofPattern("d", Locale.getDefault())
+private val monthFormatter = java.time.format.DateTimeFormatter.ofPattern("MMM", Locale.getDefault())
+
+private fun local(ms: Long) = java.time.Instant.ofEpochMilli(ms).atZone(java.time.ZoneId.systemDefault())
+
+/** "Sat 7 Nov · 7:00 PM" in the phone's time zone. */
+fun formatEventTime(ms: Long): String = eventFormatter.format(local(ms))
+fun formatDay(ms: Long): String = dayFormatter.format(local(ms))
+fun formatMonth(ms: Long): String = monthFormatter.format(local(ms)).uppercase(Locale.getDefault())
+
+/** "in 3 h", "in 2 days", "now" */
+fun formatUntil(ms: Long): String {
+    val min = ms / 60_000
+    return when {
+        min <= 0 -> "now"
+        min < 60 -> "in $min min"
+        min < 48 * 60 -> "in ${min / 60} h"
+        else -> "in ${min / (24 * 60)} days"
+    }
+}

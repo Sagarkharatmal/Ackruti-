@@ -1,5 +1,6 @@
 package com.ssk.chhupanchhupai
 
+import android.content.Intent
 import android.os.Bundle
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.BackHandler
@@ -29,7 +30,11 @@ import com.ssk.chhupanchhupai.data.Phase
 import com.ssk.chhupanchhupai.location.GameLocationService
 import com.ssk.chhupanchhupai.ui.components.CenteredMessage
 import com.ssk.chhupanchhupai.ui.components.rememberGamePermissions
+import com.ssk.chhupanchhupai.data.EventDetail
 import com.ssk.chhupanchhupai.ui.screens.CreateScreen
+import com.ssk.chhupanchhupai.ui.screens.EventDetailScreen
+import com.ssk.chhupanchhupai.ui.screens.EventEditScreen
+import com.ssk.chhupanchhupai.ui.screens.EventsScreen
 import com.ssk.chhupanchhupai.ui.screens.GameScreen
 import com.ssk.chhupanchhupai.ui.screens.HomeScreen
 import com.ssk.chhupanchhupai.ui.screens.HowToPlayScreen
@@ -43,11 +48,25 @@ import kotlinx.coroutines.launch
 class MainActivity : ComponentActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
+        if (savedInstanceState == null) handleIntent(intent)
         setContent {
             ChhupanTheme {
                 AppRoot()
             }
         }
+    }
+
+    override fun onNewIntent(intent: Intent) {
+        super.onNewIntent(intent)
+        handleIntent(intent)
+    }
+
+    private fun handleIntent(intent: Intent?) {
+        intent?.getStringExtra(EXTRA_EVENT_ID)?.let { (application as ChhupanApp).openEventRequest.value = it }
+    }
+
+    companion object {
+        const val EXTRA_EVENT_ID = "eventId"
     }
 
     override fun onStart() {
@@ -57,7 +76,7 @@ class MainActivity : ComponentActivity() {
     }
 }
 
-private enum class Menu { HOME, CREATE, JOIN, SETTINGS, HOW_TO }
+private enum class Menu { HOME, CREATE, JOIN, SETTINGS, HOW_TO, EVENTS, EVENT, EVENT_EDIT, EVENT_NEW }
 
 @Composable
 private fun AppRoot() {
@@ -65,6 +84,9 @@ private fun AppRoot() {
     val context = LocalContext.current
     val conn by app.connection.state.collectAsStateWithLifecycle()
     var menu by rememberSaveable { mutableStateOf(Menu.HOME) }
+    var eventId by rememberSaveable { mutableStateOf<String?>(null) }
+    var editingEvent by remember { mutableStateOf<EventDetail?>(null) }
+    val openRequest by app.openEventRequest.collectAsStateWithLifecycle()
     var serverUrl by remember { mutableStateOf(app.prefs.serverUrl) }
     val snackbar = remember { SnackbarHostState() }
     val permissions = rememberGamePermissions()
@@ -87,12 +109,26 @@ private fun AppRoot() {
         if (conn.hasSession && permissions.granted) GameLocationService.start(context)
     }
 
-    // Once in a game, the menu underneath goes back to the home page.
-    LaunchedEffect(conn.hasSession) {
-        if (conn.hasSession) menu = Menu.HOME
+    // A reminder notification asked to open an event.
+    LaunchedEffect(openRequest) {
+        openRequest?.let {
+            eventId = it
+            menu = Menu.EVENT
+            app.openEventRequest.value = null
+        }
     }
 
-    val leave = { app.connection.leave() }
+    // Leaving an event round takes you back to that event's page.
+    val leave = {
+        val fromEvent = conn.game?.eventId
+        app.connection.leave()
+        if (fromEvent != null) {
+            eventId = fromEvent
+            menu = Menu.EVENT
+        } else {
+            menu = Menu.HOME
+        }
+    }
 
     Scaffold(snackbarHost = { SnackbarHost(snackbar) }) { padding ->
         Box(
@@ -117,12 +153,20 @@ private fun AppRoot() {
                 }
 
                 else -> {
-                    if (menu != Menu.HOME) BackHandler { menu = Menu.HOME }
+                    val back = {
+                        menu = when (menu) {
+                            Menu.EVENT, Menu.EVENT_NEW -> Menu.EVENTS
+                            Menu.EVENT_EDIT -> Menu.EVENT
+                            else -> Menu.HOME
+                        }
+                    }
+                    if (menu != Menu.HOME) BackHandler { back() }
                     when (menu) {
                         Menu.HOME -> HomeScreen(
                             serverMissing = serverUrl.isBlank(),
                             onCreate = { menu = Menu.CREATE },
                             onJoin = { menu = Menu.JOIN },
+                            onEvents = { menu = Menu.EVENTS },
                             onHowTo = { menu = Menu.HOW_TO },
                             onSettings = { menu = Menu.SETTINGS },
                         )
@@ -144,6 +188,36 @@ private fun AppRoot() {
                         })
 
                         Menu.HOW_TO -> HowToPlayScreen(onBack = { menu = Menu.HOME })
+
+                        Menu.EVENTS -> EventsScreen(
+                            onBack = { menu = Menu.HOME },
+                            onOpen = {
+                                eventId = it
+                                menu = Menu.EVENT
+                            },
+                            onHost = { menu = Menu.EVENT_NEW },
+                        )
+
+                        Menu.EVENT -> {
+                            val id = eventId
+                            if (id == null) {
+                                menu = Menu.EVENTS
+                            } else {
+                                EventDetailScreen(id, onBack = { back() }, onEdit = {
+                                    editingEvent = it
+                                    menu = Menu.EVENT_EDIT
+                                })
+                            }
+                        }
+
+                        Menu.EVENT_NEW, Menu.EVENT_EDIT -> EventEditScreen(
+                            existing = if (menu == Menu.EVENT_EDIT) editingEvent else null,
+                            onBack = { back() },
+                            onSaved = {
+                                eventId = it
+                                menu = Menu.EVENT
+                            },
+                        )
                     }
                 }
             }
