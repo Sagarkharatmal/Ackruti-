@@ -71,7 +71,7 @@ fun ResultsScreen(game: GameState, onLeave: () -> Unit) {
     BackHandler { onLeave() }
 
     val players = results?.players.orEmpty().sortedWith(
-        compareBy<ResultPlayer> { it.role }.thenByDescending { it.survivedMs ?: 0 }.thenByDescending { it.catches },
+        compareBy<ResultPlayer> { it.role }.thenByDescending { it.survivedMs ?: 0L }.thenByDescending { it.catches },
     )
     val colorFor = players.mapIndexed { i, p -> p.id to TrailColors[i % TrailColors.size] }.toMap()
 

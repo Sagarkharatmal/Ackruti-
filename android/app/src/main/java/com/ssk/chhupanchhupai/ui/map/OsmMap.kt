@@ -188,7 +188,7 @@ private fun dotBitmap(context: Context, color: Color, label: String?, alpha: Flo
 /** Zooms to show every point (after the map has been laid out). */
 fun MapView.fitPoints(points: List<GeoPoint>, paddingDp: Int = 48) {
     if (points.isEmpty()) return
-    val run = {
+    val run: () -> Unit = {
         if (points.size == 1) {
             controller.setZoom(17.0)
             controller.setCenter(points[0])

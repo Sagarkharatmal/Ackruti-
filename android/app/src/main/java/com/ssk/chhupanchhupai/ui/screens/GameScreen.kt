@@ -428,7 +428,7 @@ private fun SeekerWaitCover(game: GameState, now: Long) {
 
 @Composable
 private fun CaughtDialog(seekers: List<PlayerInfo>, onConfirm: (String?) -> Unit, onDismiss: () -> Unit) {
-    var by by remember { mutableStateOf(seekers.singleOrNull()?.id) }
+    var chosen by remember { mutableStateOf(seekers.singleOrNull()?.id) }
     AlertDialog(
         onDismissRequest = onDismiss,
         title = { Text("Were you caught?") },
@@ -440,26 +440,26 @@ private fun CaughtDialog(seekers: List<PlayerInfo>, onConfirm: (String?) -> Unit
                     Row(
                         Modifier
                             .fillMaxWidth()
-                            .clickable { by = s.id },
+                            .clickable { chosen = s.id },
                         verticalAlignment = Alignment.CenterVertically,
                     ) {
-                        RadioButton(selected = by == s.id, onClick = { by = s.id })
+                        RadioButton(selected = chosen == s.id, onClick = { chosen = s.id })
                         Text(s.name)
                     }
                 }
                 Row(
                     Modifier
                         .fillMaxWidth()
-                        .clickable { by = null },
+                        .clickable { chosen = null },
                     verticalAlignment = Alignment.CenterVertically,
                 ) {
-                    RadioButton(selected = by == null, onClick = { by = null })
+                    RadioButton(selected = chosen == null, onClick = { chosen = null })
                     Text("Not sure")
                 }
             }
         },
         confirmButton = {
-            Button(onClick = { onConfirm(by) }, colors = ButtonDefaults.buttonColors(containerColor = SeekerRed)) {
+            Button(onClick = { onConfirm(chosen) }, colors = ButtonDefaults.buttonColors(containerColor = SeekerRed)) {
                 Text("I'm caught")
             }
         },
