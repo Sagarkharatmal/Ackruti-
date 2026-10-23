@@ -1,0 +1,121 @@
+name: Chhupan Chhupai
+
+on:
+  push:
+    branches: [main]
+    tags: ["v*"]
+    paths:
+      - "android/**"
+      - "server/**"
+      - ".github/workflows/chhupan-chhupai.yml"
+  pull_request:
+    paths:
+      - "android/**"
+      - "server/**"
+      - ".github/workflows/chhupan-chhupai.yml"
+  workflow_dispatch:
+
+permissions:
+  contents: write # needed to attach the APK to a GitHub Release on v* tags
+
+jobs:
+  server:
+    name: Game server tests
+    runs-on: ubuntu-latest
+    timeout-minutes: 15
+    services:
+      postgres:
+        image: postgres:16
+        env:
+          POSTGRES_USER: cc
+          POSTGRES_PASSWORD: cc
+          POSTGRES_DB: cc
+        ports: ["5432:5432"]
+        options: >-
+          --health-cmd "pg_isready -U cc" --health-interval 5s --health-timeout 5s --health-retries 10
+    defaults:
+      run:
+        working-directory: server
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 22
+          cache: npm
+          cache-dependency-path: server/package-lock.json
+      - run: npm ci
+      - run: npm test
+        env:
+          TEST_DATABASE_URL: postgres://cc:cc@127.0.0.1:5432/cc
+
+  android:
+    name: Build Android APK
+    runs-on: ubuntu-latest
+    timeout-minutes: 40
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 22
+
+      - name: Start a game server for the end-to-end test
+        working-directory: server
+        run: |
+          npm ci
+          PORT=8123 nohup node src/server.js > server.log 2>&1 &
+          sleep 2
+          curl -fsS http://127.0.0.1:8123/health
+
+      - uses: actions/setup-java@v4
+        with:
+          distribution: temurin
+          java-version: 17
+
+      - uses: gradle/actions/setup-gradle@v4
+
+      - name: Decode release keystore (only if secrets are set)
+        env:
+          KEYSTORE_BASE64: ${{ secrets.CHHUPAN_KEYSTORE_BASE64 }}
+        if: env.KEYSTORE_BASE64 != ''
+        run: |
+          echo "$KEYSTORE_BASE64" | base64 -d > "$RUNNER_TEMP/release.jks"
+          echo "CHHUPAN_KEYSTORE_PATH=$RUNNER_TEMP/release.jks" >> "$GITHUB_ENV"
+
+      - name: Unit tests, end-to-end protocol test and APKs
+        working-directory: android
+        env:
+          ITEST_URL: ws://127.0.0.1:8123/ws
+          CHHUPAN_SERVER_URL: ${{ vars.CHHUPAN_SERVER_URL }}
+          CHHUPAN_VERSION_CODE: ${{ github.run_number }}
+          CHHUPAN_KEYSTORE_PASSWORD: ${{ secrets.CHHUPAN_KEYSTORE_PASSWORD }}
+          CHHUPAN_KEY_ALIAS: ${{ secrets.CHHUPAN_KEY_ALIAS }}
+          CHHUPAN_KEY_PASSWORD: ${{ secrets.CHHUPAN_KEY_PASSWORD }}
+        run: |
+          chmod +x gradlew
+          ./gradlew --no-daemon --stacktrace testDebugUnitTest assembleDebug assembleRelease
+
+      - name: Rename APKs
+        run: |
+          mkdir -p dist
+          cp android/app/build/outputs/apk/release/app-release.apk dist/ChhupanChhupai-${{ github.run_number }}.apk
+          cp android/app/build/outputs/apk/debug/app-debug.apk dist/ChhupanChhupai-${{ github.run_number }}-debug.apk
+
+      - uses: actions/upload-artifact@v4
+        with:
+          name: ChhupanChhupai-apk-${{ github.run_number }}
+          path: dist/*.apk
+
+      - uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: test-reports-${{ github.run_number }}
+          path: |
+            android/app/build/reports/tests/
+            server/server.log
+
+      - name: Publish GitHub Release (v* tags only)
+        if: startsWith(github.ref, 'refs/tags/v')
+        uses: softprops/action-gh-release@v2
+        with:
+          files: dist/*.apk

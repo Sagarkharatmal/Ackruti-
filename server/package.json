@@ -1,0 +1,21 @@
+{
+  "name": "chhupan-chhupai-server",
+  "version": "1.0.0",
+  "description": "Real-time referee server for the Chhupan Chhupai real-life hide-and-seek game",
+  "type": "module",
+  "main": "src/server.js",
+  "engines": {
+    "node": ">=20"
+  },
+  "scripts": {
+    "start": "node src/server.js",
+    "test": "node --test test/*.test.js",
+    "simulate": "node scripts/simulate.js"
+  },
+  "dependencies": {
+    "pg": "8.13.1",
+    "ws": "8.18.0"
+  },
+  "license": "UNLICENSED",
+  "private": true
+}
