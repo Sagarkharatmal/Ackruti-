@@ -1,3 +1,5 @@
+<img src="docs/icon.png" width="120" alt="Chhupan Chhupai icon" align="right">
+
 # Chhupan Chhupai 🙈
 
 > **Made by SSK** · Last updated 23 Oct 2026
